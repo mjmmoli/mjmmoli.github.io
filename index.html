@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jana Morais · UX · IA · Gestão Ágil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0f0f;
+    --paper: #f5f2ee;
+    --cream: #ede9e3;
+    --sage: #7a9e8e;
+    --sage-light: #b8d4c8;
+    --terracotta: #c4704a;
+    --warm-white: #faf8f5;
+    --muted: #6b6560;
+    --border: #d8d3cc;
+    --card-bg: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(245,242,238,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; top: 0; right: 0;
+    width: 55%; height: 100%;
+    background: linear-gradient(135deg, var(--cream) 0%, var(--sage-light) 60%, var(--sage) 100%);
+    clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%);
+    z-index: 0;
+    opacity: 0.6;
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 680px;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--terracotta);
+    margin-bottom: 1.5rem;
+    padding: 0.35rem 1rem;
+    border: 1px solid var(--terracotta);
+    border-radius: 100px;
+  }
+  .hero-name {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--sage);
+  }
+  .hero-tagline {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    max-width: 520px;
+    line-height: 1.5;
+  }
+  .hero-insight {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 1.4rem 1.8rem;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    max-width: 560px;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    position: relative;
+  }
+  .hero-insight::before {
+    content: '"';
+    font-family: 'Fraunces', serif;
+    font-size: 4rem;
+    color: var(--sage);
+    position: absolute;
+    top: -0.5rem; left: 1rem;
+    line-height: 1;
+  }
+  .hero-insight p { padding-left: 2rem; }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: all .25s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: var(--ink); color: var(--paper);
+  }
+  .btn-primary:hover { background: var(--terracotta); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn-outline:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 4rem; }
+  section:nth-child(even) { background: var(--warm-white); }
+
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--terracotta);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 3rem;
+    max-width: 600px;
+  }
+  .section-title em { font-style: italic; color: var(--sage); }
+
+  /* ── SOBRE ── */
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .sobre-text p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+  }
+  .sobre-text p strong { color: var(--ink); font-weight: 600; }
+  .sobre-pills {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+    margin-top: 2rem;
+  }
+  .pill {
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem; font-weight: 500;
+    background: var(--cream);
+    color: var(--ink);
+    border: 1px solid var(--border);
+  }
+  .pill.green { background: #e8f4ef; color: var(--sage); border-color: var(--sage-light); }
+  .pill.terra { background: #f8ede6; color: var(--terracotta); border-color: #e8c0a8; }
+
+  .sobre-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+  .stat-card {
+    background: var(--cream);
+    padding: 1.8rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  .stat-number {
+    font-family: 'Fraunces', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .stat-number span { color: var(--terracotta); }
+  .stat-label {
+    font-size: 0.8rem; color: var(--muted); line-height: 1.4;
+  }
+
+  /* ── PROJETOS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2rem;
+  }
+  .project-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform .3s, box-shadow .3s;
+    display: flex; flex-direction: column;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.1);
+  }
+  .project-header {
+    padding: 2rem 2rem 1.5rem;
+    position: relative;
+  }
+  .project-header.heineken { background: linear-gradient(135deg, #1a3a2a 0%, #2d6a45 100%); }
+  .project-header.crise { background: linear-gradient(135deg, #1a2a3a 0%, #2d4a6a 100%); }
+  .project-header.photo { background: linear-gradient(135deg, #2a1a0a 0%, #6a3a1a 100%); }
+  .project-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    background: rgba(255,255,255,0.15);
+    margin-bottom: 1.2rem;
+  }
+  .project-tag {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.6rem;
+  }
+  .project-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem; font-weight: 400;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .project-body {
+    padding: 1.8rem 2rem;
+    flex: 1; display: flex; flex-direction: column;
+  }
+  .project-desc {
+    font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+    margin-bottom: 1.5rem; flex: 1;
+  }
+  .project-tags {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .ptag {
+    font-size: 0.72rem; font-weight: 500;
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    background: var(--cream);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .project-link {
+    font-size: 0.82rem; font-weight: 600;
+    color: var(--terracotta); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .project-link:hover { text-decoration: underline; }
+  .project-link::after { content: '→'; }
+
+  /* ── SKILLS ── */
+  .skills-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .skills-intro p {
+    font-size: 0.95rem; color: var(--muted); line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .skill-group {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+  }
+  .skill-group-title {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--terracotta);
+    margin-bottom: 1rem;
+  }
+  .skill-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.88rem; color: var(--ink);
+    margin-bottom: 0.7rem;
+  }
+  .skill-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--sage);
+    flex-shrink: 0;
+  }
+
+  /* ── SOFTSKILLS ── */
+  .soft-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  .soft-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: border-color .2s, transform .2s;
+  }
+  .soft-card:hover {
+    border-color: var(--sage);
+    transform: translateY(-3px);
+  }
+  .soft-emoji {
+    font-size: 2rem; margin-bottom: 0.8rem; display: block;
+  }
+  .soft-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem; font-weight: 400;
+    color: var(--ink); margin-bottom: 0.4rem;
+  }
+  .soft-desc {
+    font-size: 0.8rem; color: var(--muted); line-height: 1.5;
+  }
+
+  /* ── CERTIFICADOS ── */
+  .certs-filter {
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .filter-btn {
+    padding: 0.45rem 1.2rem;
+    border-radius: 100px;
+    font-size: 0.8rem; font-weight: 500;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--ink); color: var(--paper); border-color: var(--ink);
+  }
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .cert-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    border: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 1rem;
+    transition: transform .2s, box-shadow .2s;
+    cursor: default;
+  }
+  .cert-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.07);
+  }
+  .cert-card[data-hidden="true"] { display: none; }
+  .cert-badge {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .cert-badge.google { background: #e8f0fe; }
+  .cert-badge.coursera { background: #e8f4ef; }
+  .cert-badge.cisco { background: #fff0e8; }
+  .cert-badge.estacio { background: #f0e8ff; }
+  .cert-badge.aws { background: #fff8e8; }
+  .cert-badge.dio { background: #ffe8f0; }
+  .cert-badge.codefinity { background: #e8fff0; }
+  .cert-badge.santander { background: #ffe8e8; }
+  .cert-badge.jpf { background: #e8fff8; }
+  .cert-info { flex: 1; min-width: 0; }
+  .cert-name {
+    font-size: 0.9rem; font-weight: 600; color: var(--ink);
+    line-height: 1.3; margin-bottom: 0.25rem;
+  }
+  .cert-issuer {
+    font-size: 0.75rem; color: var(--muted);
+  }
+  .cert-year {
+    font-size: 0.7rem; font-weight: 600;
+    color: var(--terracotta);
+    white-space: nowrap; align-self: center;
+  }
+
+  /* ── EXPERIÊNCIA ── */
+  .timeline {
+    max-width: 720px;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 11px; top: 6px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .timeline-item {
+    display: flex; gap: 2rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .timeline-dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--sage);
+    flex-shrink: 0; margin-top: 0.15rem;
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .timeline-dot-inner {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--sage);
+  }
+  .timeline-content { flex: 1; }
+  .timeline-period {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--terracotta);
+    margin-bottom: 0.3rem;
+  }
+  .timeline-role {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem; font-weight: 400;
+    margin-bottom: 0.15rem;
+  }
+  .timeline-company {
+    font-size: 0.85rem; color: var(--muted);
+    margin-bottom: 0.7rem;
+  }
+  .timeline-desc {
+    font-size: 0.88rem; color: var(--muted); line-height: 1.7;
+  }
+
+  /* ── CONTATO ── */
+  #contato {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  #contato .section-label { color: var(--sage); }
+  #contato .section-title { color: var(--paper); }
+  #contato .section-title em { color: var(--sage-light); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .contact-text {
+    font-size: 1rem; color: rgba(245,242,238,0.7); line-height: 1.8;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    text-decoration: none;
+    color: var(--paper);
+    font-size: 0.9rem;
+    transition: background .2s;
+  }
+  .contact-link:hover { background: rgba(255,255,255,0.12); }
+  .contact-link-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-link-text { flex: 1; }
+  .contact-link-label { font-size: 0.7rem; color: rgba(245,242,238,0.5); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 1.5rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p {
+    font-size: 0.78rem; color: rgba(245,242,238,0.4);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up {
+    opacity: 0;
+    animation: fadeUp .7s ease forwards;
+  }
+  .delay-1 { animation-delay: .1s; }
+  .delay-2 { animation-delay: .25s; }
+  .delay-3 { animation-delay: .4s; }
+  .delay-4 { animation-delay: .55s; }
+  .delay-5 { animation-delay: .7s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    #hero { padding: 7rem 1.5rem 3rem; }
+    .hero-bg { width: 100%; clip-path: polygon(0 60%, 100% 40%, 100% 100%, 0 100%); }
+    .sobre-grid, .skills-layout, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .sobre-stats { grid-template-columns: 1fr 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Jana Morais</a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#competencias">Skills</a></li>
+    <li><a href="#certificados">Certificados</a></li>
+    <li><a href="#experiencia">Experiência</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow fade-up">Disponível · Estágio ou Júnior · BH / Remoto</span>
+    <h1 class="hero-name fade-up delay-1">Mirna<br><em>Jana</em> Morais</h1>
+    <p class="hero-tagline fade-up delay-2">UX Design · Gestão Ágil · Inteligência Artificial<br>Transição com propósito — da gestão à tecnologia.</p>
+    <div class="hero-insight fade-up delay-3">
+      <p>Profissional com 20+ anos de experiência administrativa que aprendeu a <strong>pensar em sistemas</strong> antes de descobrir que isso tinha nome. Hoje traduzo essa bagagem em UX, prompts e processos que funcionam para pessoas reais.</p>
+    </div>
+    <div class="hero-cta fade-up delay-4">
+      <a href="mailto:jmoraisbhz@gmail.com" class="btn btn-primary">Falar comigo</a>
+      <a href="https://linkedin.com/in/mirnajmmoliveira" target="_blank" class="btn btn-outline">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-label">Quem sou</div>
+  <div class="sobre-grid">
+    <div class="sobre-text">
+      <h2 class="section-title">Uma trajetória que<br><em>conecta pontos</em></h2>
+      <p>Comecei como estagiária em gestão de vendas na CCE Eletrônicos. De lá, passei por logística, secretaria escolar, supervisão financeira e 12 anos de fotografia autoral com exposições no CCBB. O fio condutor de tudo isso: <strong>observar processos, entender pessoas e entregar com qualidade</strong>.</p>
+      <p>Em 2025, essa clareza virou decisão: entrei em <strong>Análise e Desenvolvimento de Sistemas</strong> e me dedico ativamente à formação em UX Design, Gestão Ágil e IA — construindo, na prática, o repertório técnico que complementa minha bagagem administrativa.</p>
+      <div class="sobre-pills">
+        <span class="pill green">Scrum Master Cert.</span>
+        <span class="pill green">Google UX Design</span>
+        <span class="pill terra">Prompt Engineering</span>
+        <span class="pill">AWS AI Practitioner</span>
+        <span class="pill">Python · NumPy · Pandas</span>
+        <span class="pill">Figma</span>
+      </div>
+    </div>
+    <div class="sobre-stats">
+      <div class="stat-card">
+        <div class="stat-number">20<span>+</span></div>
+        <div class="stat-label">anos de experiência em gestão de processos e pessoas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">25<span>+</span></div>
+        <div class="stat-label">certificações concluídas em TI, UX e IA</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">2</div>
+        <div class="stat-label">projetos aplicados com entregáveis reais documentados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">12<span>y</span></div>
+        <div class="stat-label">como fotógrafa — onde aprendi a ver antes de criar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section id="projetos">
+  <div class="section-label">Projetos</div>
+  <h2 class="section-title">Entregas <em>reais</em>,<br>problemas reais</h2>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-header heineken">
+        <div class="project-icon">🍺</div>
+        <div class="project-tag">IA Aplicada · Prompt Engineering</div>
+        <div class="project-title">Copiloto de Vendas Heineken</div>
+      </div>
+      <div class="project-body">
+        <p class="project-desc">Assistente de IA que atua como co-piloto de representantes comerciais de uma distribuidora de bebidas. Recebe contexto do ERP/CRM via bloco estruturado e gera briefing, diagnóstico, oferta personalizada e mensagens prontas — argumentando sempre por margem e giro, nunca por desconto. Testado com caso real de recuperação de cliente.</p>
+        <div class="project-tags">
+          <span class="ptag">Prompt Engineering</span>
+          <span class="ptag">ERP/CRM Integration</span>
+          <span class="ptag">Anti-hallucination</span>
+          <span class="ptag">UX de IA</span>
+        </div>
+        <div style="background:#f0f9f4;border-radius:8px;padding:1rem;margin-bottom:1.2rem;font-size:0.82rem;color:#2d6a45;line-height:1.6">
+          <strong>Resultado validado:</strong> o assistente disparou automaticamente o "modo Recuperação", priorizou observação ao vivo do representante sobre dado do sistema, e não inventou nenhum valor de preço marcado como indisponível.
+        </div>
+        <a href="https://github.com/mjmmoli" target="_blank" class="project-link">Ver no GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header crise">
+        <div class="project-icon">🆘</div>
+        <div class="project-tag">UX Design · Sistemas de Informação · Extensão Universitária</div>
+        <div class="project-title">Plataforma de Gestão de Crise — Ubá-MG</div>
+      </div>
+      <div class="project-body">
+        <p class="project-desc">Proposta conceitual de plataforma de gerenciamento de crises inspirada nas enchentes de Ubá-MG (fev/2026). A partir de relatos diretos de familiares afetados, mapeei falhas sistêmicas reais — ausência de alertas, cadastros de vulneráveis inexistentes, comunicação fragmentada entre Defesa Civil, SAMU e Bombeiros — e transformei vivências em requisitos de sistema.</p>
+        <div class="project-tags">
+          <span class="ptag">Levantamento de Requisitos</span>
+          <span class="ptag">UX Research</span>
+          <span class="ptag">Wireframes</span>
+          <span class="ptag">Design Centrado no Usuário</span>
+        </div>
+        <div style="background:#f0f4f9;border-radius:8px;padding:1rem;margin-bottom:1.2rem;font-size:0.82rem;color:#2d4a6a;line-height:1.6">
+          <strong>Entregáveis:</strong> wireframes, protótipos de baixa fidelidade, fluxos de uso, documentação de requisitos funcionais e relatório de extensão universitária (Estácio, 2026.1).
+        </div>
+        <a href="https://github.com/mjmmoli" target="_blank" class="project-link">Ver documentação</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header photo">
+        <div class="project-icon">📷</div>
+        <div class="project-tag">Criação · Gestão · Publicação</div>
+        <div class="project-title">JM Fotografia — 12 anos de trajetória autoral</div>
+      </div>
+      <div class="project-body">
+        <p class="project-desc">Gestão completa de projeto criativo independente: planejamento, captação, edição (Photoshop/Lightroom), entrega e relacionamento com clientes. Coberturas jornalísticas para veículos locais, eventos privados e exposições. Fotos selecionadas para o CCBB Brasília e BH; obras publicadas em livros e premiadas em concursos nacionais.</p>
+        <div class="project-tags">
+          <span class="ptag">Gestão de Projeto End-to-End</span>
+          <span class="ptag">Photoshop · Lightroom</span>
+          <span class="ptag">Relação com Cliente</span>
+          <span class="ptag">Curadoria Visual</span>
+        </div>
+        <div style="background:#f9f0e8;border-radius:8px;padding:1rem;margin-bottom:1.2rem;font-size:0.82rem;color:#6a3a1a;line-height:1.6">
+          <strong>Por que importa para TI:</strong> 12 anos gerenciando um projeto do zero até a entrega ensinam priorização, qualidade de produto e escuta do usuário — mais do que qualquer curso de gestão.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPETÊNCIAS -->
+<section id="competencias">
+  <div class="section-label">Competências</div>
+  <div class="skills-layout">
+    <div class="skills-intro">
+      <h2 class="section-title">Skills que<br><em>se complementam</em></h2>
+      <p>Não sou só técnica nem só criativa. A combinação de visão de processos, sensibilidade de usuário e fluência em IA é o que me diferencia.</p>
+      <div style="margin-top:2rem">
+        <div class="section-label" style="margin-bottom:1.2rem">Soft Skills em destaque</div>
+        <div class="soft-grid" style="grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="soft-card">
+            <span class="soft-emoji">🔍</span>
+            <div class="soft-title">Olhar Sistêmico</div>
+            <div class="soft-desc">Ver o todo antes de propor a solução — herança da gestão e da fotografia.</div>
+          </div>
+          <div class="soft-card">
+            <span class="soft-emoji">🤝</span>
+            <div class="soft-title">Escuta Ativa</div>
+            <div class="soft-desc">Traduzir o que o usuário sente em requisitos que o sistema entende.</div>
+          </div>
+          <div class="soft-card">
+            <span class="soft-emoji">🧩</span>
+            <div class="soft-title">Resolução de Problemas</div>
+            <div class="soft-desc">Transformar situação de caos (crise real) em estrutura acionável.</div>
+          </div>
+          <div class="soft-card">
+            <span class="soft-emoji">📐</span>
+            <div class="soft-title">Atenção ao Detalhe</div>
+            <div class="soft-desc">12 anos editando imagem ensinam que o detalhe é o produto.</div>
+          </div>
+          <div class="soft-card">
+            <span class="soft-emoji">🚀</span>
+            <div class="soft-title">Aprendizado Contínuo</div>
+            <div class="soft-desc">25+ certificações escolhidas com intenção — não por volume.</div>
+          </div>
+          <div class="soft-card">
+            <span class="soft-emoji">💬</span>
+            <div class="soft-title">Comunicação Clara</div>
+            <div class="soft-desc">Documentação técnica legível por stakeholder e por desenvolvedor.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">UX Design</div>
+        <div class="skill-item"><span class="skill-dot"></span>Pesquisa de usuário</div>
+        <div class="skill-item"><span class="skill-dot"></span>Wireframes & Protótipos</div>
+        <div class="skill-item"><span class="skill-dot"></span>Figma (High-Fidelity)</div>
+        <div class="skill-item"><span class="skill-dot"></span>Testes de usabilidade</div>
+        <div class="skill-item"><span class="skill-dot"></span>Design para acessibilidade</div>
+        <div class="skill-item"><span class="skill-dot"></span>Jornada do usuário</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Gestão Ágil</div>
+        <div class="skill-item"><span class="skill-dot"></span>Scrum · Sprint Planning</div>
+        <div class="skill-item"><span class="skill-dot"></span>Kanban</div>
+        <div class="skill-item"><span class="skill-dot"></span>Levantamento de Requisitos</div>
+        <div class="skill-item"><span class="skill-dot"></span>Gestão de Projetos</div>
+        <div class="skill-item"><span class="skill-dot"></span>ERP (Wintour)</div>
+        <div class="skill-item"><span class="skill-dot"></span>Mapeamento de processos</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Inteligência Artificial</div>
+        <div class="skill-item"><span class="skill-dot"></span>Prompt Engineering</div>
+        <div class="skill-item"><span class="skill-dot"></span>GPT Agents · Claude</div>
+        <div class="skill-item"><span class="skill-dot"></span>AI Reports</div>
+        <div class="skill-item"><span class="skill-dot"></span>NotebookLM</div>
+        <div class="skill-item"><span class="skill-dot"></span>AWS AI Practitioner</div>
+        <div class="skill-item"><span class="skill-dot"></span>LLM · Machine Learning</div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Dados & Dev</div>
+        <div class="skill-item"><span class="skill-dot"></span>Python</div>
+        <div class="skill-item"><span class="skill-dot"></span>NumPy · Pandas</div>
+        <div class="skill-item"><span class="skill-dot"></span>Excel avançado + IA</div>
+        <div class="skill-item"><span class="skill-dot"></span>HTML · CSS básico</div>
+        <div class="skill-item"><span class="skill-dot"></span>Intro Cibersegurança</div>
+        <div class="skill-item"><span class="skill-dot"></span>Inglês intermediário</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICADOS -->
+<section id="certificados">
+  <div class="section-label">Certificações</div>
+  <h2 class="section-title">Aprendizado <em>intencional</em></h2>
+  <div class="certs-filter">
+    <button class="filter-btn active" onclick="filterCerts('all', this)">Todos</button>
+    <button class="filter-btn" onclick="filterCerts('ux', this)">UX Design</button>
+    <button class="filter-btn" onclick="filterCerts('agil', this)">Agile · Scrum</button>
+    <button class="filter-btn" onclick="filterCerts('ia', this)">IA · Dados</button>
+    <button class="filter-btn" onclick="filterCerts('dev', this)">Dev · Segurança</button>
+    <button class="filter-btn" onclick="filterCerts('gestao', this)">Gestão</button>
+  </div>
+  <div class="certs-grid">
+
+    <!-- UX -->
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">🎨</div>
+      <div class="cert-info">
+        <div class="cert-name">Google UX Design (Especialização)</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">📐</div>
+      <div class="cert-info">
+        <div class="cert-name">Foundations of UX Design</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">🖼️</div>
+      <div class="cert-info">
+        <div class="cert-name">Build Wireframes and Low-Fidelity Prototypes</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">🔬</div>
+      <div class="cert-info">
+        <div class="cert-name">UX Research and Test Early Concepts</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">✨</div>
+      <div class="cert-info">
+        <div class="cert-name">Create High-Fidelity Designs in Figma</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">🌐</div>
+      <div class="cert-info">
+        <div class="cert-name">Build Dynamic User Interfaces for Websites</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">💚</div>
+      <div class="cert-info">
+        <div class="cert-name">Design UX for Social Good</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ux">
+      <div class="cert-badge google">🔄</div>
+      <div class="cert-info">
+        <div class="cert-name">UX Design Process</div>
+        <div class="cert-issuer">Google · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+
+    <!-- AGILE -->
+    <div class="cert-card" data-cat="agil">
+      <div class="cert-badge coursera">🏅</div>
+      <div class="cert-info">
+        <div class="cert-name">Scrum Master Certification (Especialização)</div>
+        <div class="cert-issuer">LearnQuest · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="agil">
+      <div class="cert-badge coursera">⚡</div>
+      <div class="cert-info">
+        <div class="cert-name">Scrum Methodologies</div>
+        <div class="cert-issuer">LearnQuest · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="agil">
+      <div class="cert-badge coursera">🔗</div>
+      <div class="cert-info">
+        <div class="cert-name">Scaling Agile and the Team-of-Teams</div>
+        <div class="cert-issuer">LearnQuest · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="agil">
+      <div class="cert-badge estacio">📋</div>
+      <div class="cert-info">
+        <div class="cert-name">Gerenciamento de Projetos</div>
+        <div class="cert-issuer">Estácio de Sá</div>
+      </div>
+      <div class="cert-year">2025</div>
+    </div>
+    <div class="cert-card" data-cat="agil">
+      <div class="cert-badge coursera">🤝</div>
+      <div class="cert-info">
+        <div class="cert-name">Combining Scrum with Other Agile Methodologies</div>
+        <div class="cert-issuer">LearnQuest · Coursera</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+
+    <!-- IA -->
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge santander">🤖</div>
+      <div class="cert-info">
+        <div class="cert-name">Prompting Responsável: IA nos Negócios</div>
+        <div class="cert-issuer">Santander · Microsoft</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge dio">🧠</div>
+      <div class="cert-info">
+        <div class="cert-name">Copiloto Especialista de Vendas (Projeto Final)</div>
+        <div class="cert-issuer">DIO · Bootcamp Heineken</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge dio">📊</div>
+      <div class="cert-info">
+        <div class="cert-name">Introdução a AI Reports</div>
+        <div class="cert-issuer">DIO</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge aws">☁️</div>
+      <div class="cert-info">
+        <div class="cert-name">AWS AI Practitioner — Semanas 1, 2 e 3</div>
+        <div class="cert-issuer">AWS · Trilha de Certificação</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge aws">☁️</div>
+      <div class="cert-info">
+        <div class="cert-name">Nuvem e IA Para Empresas</div>
+        <div class="cert-issuer">AWS</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge jpf">🔮</div>
+      <div class="cert-info">
+        <div class="cert-name">Fundamentos de IA, LLM e Agentes</div>
+        <div class="cert-issuer">JPF</div>
+      </div>
+      <div class="cert-year">2025</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge jpf">💡</div>
+      <div class="cert-info">
+        <div class="cert-name">Tecnologia e Inovação</div>
+        <div class="cert-issuer">JPF</div>
+      </div>
+      <div class="cert-year">2025</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge estacio">📔</div>
+      <div class="cert-info">
+        <div class="cert-name">Treinando IA com NotebookLM</div>
+        <div class="cert-issuer">Estácio / DIO</div>
+      </div>
+      <div class="cert-year">2025</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge santander">✍️</div>
+      <div class="cert-info">
+        <div class="cert-name">Técnicas de Engenharia de Prompt</div>
+        <div class="cert-issuer">Santander · Microsoft</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="ia">
+      <div class="cert-badge santander">✍️</div>
+      <div class="cert-info">
+        <div class="cert-name">Aceleração: Excel, GPT Agents e Claude Code</div>
+        <div class="cert-issuer">Santander · Microsoft</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+
+    <!-- DEV -->
+    <div class="cert-card" data-cat="dev">
+      <div class="cert-badge codefinity">🐍</div>
+      <div class="cert-info">
+        <div class="cert-name">Introdução ao Python</div>
+        <div class="cert-issuer">Codefinity</div>
+      </div>
+      <div class="cert-year">2024</div>
+    </div>
+    <div class="cert-card" data-cat="dev">
+      <div class="cert-badge codefinity">🐍</div>
+      <div class="cert-info">
+        <div class="cert-name">Estrutura de Dados Python</div>
+        <div class="cert-issuer">Codefinity</div>
+      </div>
+      <div class="cert-year">2024</div>
+    </div>
+    <div class="cert-card" data-cat="dev">
+      <div class="cert-badge codefinity">📈</div>
+      <div class="cert-info">
+        <div class="cert-name">Ultimate NumPy</div>
+        <div class="cert-issuer">Codefinity</div>
+      </div>
+      <div class="cert-year">2024</div>
+    </div>
+    <div class="cert-card" data-cat="dev">
+      <div class="cert-badge codefinity">🐼</div>
+      <div class="cert-info">
+        <div class="cert-name">Pandas First Steps</div>
+        <div class="cert-issuer">Codefinity</div>
+      </div>
+      <div class="cert-year">2024</div>
+    </div>
+    <div class="cert-card" data-cat="dev">
+      <div class="cert-badge cisco">🔒</div>
+      <div class="cert-info">
+        <div class="cert-name">Introdução à Cibersegurança</div>
+        <div class="cert-issuer">Cisco</div>
+      </div>
+      <div class="cert-year">2025</div>
+    </div>
+
+    <!-- GESTÃO -->
+    <div class="cert-card" data-cat="gestao">
+      <div class="cert-badge estacio">❤️</div>
+      <div class="cert-info">
+        <div class="cert-name">Inteligência Emocional e Liderança</div>
+        <div class="cert-issuer">Estácio de Sá</div>
+      </div>
+      <div class="cert-year">2026</div>
+    </div>
+    <div class="cert-card" data-cat="gestao">
+      <div class="cert-badge jpf">♟️</div>
+      <div class="cert-info">
+        <div class="cert-name">Pensamento Estratégico</div>
+        <div class="cert-issuer">JPF</div>
+      </div>
+      <div class="cert-year">2025</div>
+    </div>
+    <div class="cert-card" data-cat="gestao">
+      <div class="cert-badge jpf">🧘</div>
+      <div class="cert-info">
+        <div class="cert-name">Inteligência Emocional</div>
+        <div class="cert-issuer">JPF</div>
+      </div>
+      <div class="cert-year">2025</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIÊNCIA -->
+<section id="experiencia">
+  <div class="section-label">Trajetória</div>
+  <h2 class="section-title">De onde <em>venho</em></h2>
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content">
+        <div class="timeline-period">2025 – atual</div>
+        <div class="timeline-role">Graduanda em Análise e Desenvolvimento de Sistemas</div>
+        <div class="timeline-company">Estácio de Sá · EAD</div>
+        <div class="timeline-desc">Foco em UX Design, Gestão Ágil e Inteligência Artificial. Projeto de extensão universitária: Plataforma de Gestão de Crise — Ubá-MG.</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content">
+        <div class="timeline-period">2012 – 2024 · 12 anos</div>
+        <div class="timeline-role">Fotógrafa e Editora de Imagens</div>
+        <div class="timeline-company">JM Fotografia · Autônoma · Belo Horizonte</div>
+        <div class="timeline-desc">Fotografia autoral, coberturas jornalísticas e serviços de edição. Exposições no CCBB Brasília e BH. Gestão completa do negócio: planejamento, captação, edição, entrega e relacionamento com clientes.</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content">
+        <div class="timeline-period">2010 – 2011</div>
+        <div class="timeline-role">Supervisora Administrativa / Financeira</div>
+        <div class="timeline-company">Chris Biagioni Viagens Especiais · Belo Horizonte</div>
+        <div class="timeline-desc">Implantação do ERP Wintour (mapeamento de fluxos), gestão financeira completa, contratos de câmbio e supervisão de equipe.</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content">
+        <div class="timeline-period">2006 – 2007</div>
+        <div class="timeline-role">Assistente de Secretaria Escolar</div>
+        <div class="timeline-company">Ibmec · Belo Horizonte</div>
+        <div class="timeline-desc">Gestão de cadastros, matrículas e eventos acadêmicos.</div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+      <div class="timeline-content">
+        <div class="timeline-period">2003 – 2006</div>
+        <div class="timeline-role">Assistente Administrativo</div>
+        <div class="timeline-company">SENAI · Sistema FIEMG · Belo Horizonte</div>
+        <div class="timeline-desc">Atendimento a fornecedores, controle de estoque e patrimônio, apoio em contratos.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="section-label">Contato</div>
+  <div class="contact-grid">
+    <div>
+      <h2 class="section-title">Vamos <em>conversar</em><br>sobre o próximo passo?</h2>
+      <p class="contact-text">Estou disponível para estágio ou posição júnior em UX Design, Produto, IA Aplicada ou Gestão Ágil — presencial em BH, remoto ou híbrido. Não busco a vaga perfeita. Busco o lugar certo para aprender, contribuir e crescer junto com a equipe.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:jmoraisbhz@gmail.com" class="contact-link">
+        <div class="contact-link-icon">📧</div>
+        <div class="contact-link-text">
+          <div>jmoraisbhz@gmail.com</div>
+          <div class="contact-link-label">E-mail</div>
+        </div>
+      </a>
+      <a href="https://linkedin.com/in/mirnajmmoliveira" target="_blank" class="contact-link">
+        <div class="contact-link-icon">💼</div>
+        <div class="contact-link-text">
+          <div>linkedin.com/in/mirnajmmoliveira</div>
+          <div class="contact-link-label">LinkedIn</div>
+        </div>
+      </a>
+      <a href="https://github.com/mjmmoli" target="_blank" class="contact-link">
+        <div class="contact-link-icon">💻</div>
+        <div class="contact-link-text">
+          <div>github.com/mjmmoli</div>
+          <div class="contact-link-label">GitHub · Projetos e código</div>
+        </div>
+      </a>
+      <a href="tel:+5531998720388" class="contact-link">
+        <div class="contact-link-icon">📱</div>
+        <div class="contact-link-text">
+          <div>(31) 99872-0388</div>
+          <div class="contact-link-label">WhatsApp · Belo Horizonte, MG</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Mirna Jana Morais · Portfolio · mjmmoli.github.io</p>
+  <p>Feito com cuidado — assim como tudo que entrego.</p>
+</footer>
+
+<script>
+  function filterCerts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.cert-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.removeAttribute('data-hidden');
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.project-card, .cert-card, .stat-card, .skill-group, .soft-card, .timeline-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
