@@ -62,100 +62,6 @@
 
   /* ── HERO ── */
   #hero {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 8rem 4rem 4rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute; top: 0; right: 0;
-    width: 55%; height: 100%;
-    background: linear-gradient(135deg, var(--cream) 0%, var(--sage-light) 60%, var(--sage) 100%);
-    clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%);
-    z-index: 0;
-    opacity: 0.6;
-  }
-  .hero-content {
-    position: relative; z-index: 1;
-    max-width: 680px;
-  }
-  .hero-eyebrow {
-    display: inline-block;
-    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--terracotta);
-    margin-bottom: 1.5rem;
-    padding: 0.35rem 1rem;
-    border: 1px solid var(--terracotta);
-    border-radius: 100px;
-  }
-  .hero-name {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(3.5rem, 7vw, 6rem);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-  .hero-name em {
-    font-style: italic;
-    color: var(--sage);
-  }
-  .hero-tagline {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
-    font-weight: 300;
-    color: var(--muted);
-    margin-bottom: 2rem;
-    max-width: 520px;
-    line-height: 1.5;
-  }
-  .hero-insight {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 1.4rem 1.8rem;
-    border-radius: 12px;
-    margin-bottom: 2.5rem;
-    max-width: 560px;
-    font-size: 0.95rem;
-    line-height: 1.65;
-    position: relative;
-  }
-  .hero-insight::before {
-    content: '"';
-    font-family: 'Fraunces', serif;
-    font-size: 4rem;
-    color: var(--sage);
-    position: absolute;
-    top: -0.5rem; left: 1rem;
-    line-height: 1;
-  }
-  .hero-insight p { padding-left: 2rem; }
-  .hero-cta {
-    display: flex; gap: 1rem; flex-wrap: wrap;
-  }
-  .btn {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.85rem 2rem;
-    border-radius: 100px;
-    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.04em;
-    text-decoration: none;
-    transition: all .25s;
-    cursor: pointer; border: none;
-  }
-  .btn-primary {
-    background: var(--ink); color: var(--paper);
-  }
-  .btn-primary:hover { background: var(--terracotta); transform: translateY(-2px); }
-  .btn-outline {
-    background: transparent; color: var(--ink);
-    border: 1.5px solid var(--ink);
-  }
-  .btn-outline:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
-
-
-  /* ── HERO ── */
-  #hero {
     min-height: auto;
     display: flex; align-items: center;
     padding: 5.5rem 4rem 3.5rem;
@@ -237,17 +143,26 @@
   .hero-insight p { padding-left: 1.6rem; }
   .hero-cta { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: all .25s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: var(--ink); color: var(--paper);
+  }
+  .btn-primary:hover { background: var(--terracotta); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn-outline:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
 
   /* Cards padronizados */
-  .card-section { margin-bottom: 0.9rem; }
-  .card-section-title {
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--terracotta);
-    margin-bottom: 0.35rem;
-  }
-  .card-section-body {
-    font-size: 0.85rem; color: var(--muted); line-height: 1.65;
-  }
   .btn-doc {
     display: inline-flex; align-items: center; gap: 0.4rem;
     background: var(--cream); color: var(--ink);
@@ -257,10 +172,6 @@
     transition: background .2s;
   }
   .btn-doc:hover { background: var(--ink); color: var(--paper); }
-  .project-featured {
-    border: 2px solid var(--terracotta);
-    box-shadow: 0 0 0 4px rgba(196,112,74,0.1);
-  }
 
   /* ── SECTIONS ── */
   section { padding: 6rem 4rem; }
@@ -333,11 +244,6 @@
   }
 
   /* ── PROJETOS ── */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 2rem;
-  }
   .project-card {
     background: var(--card-bg);
     border-radius: 20px;
@@ -350,21 +256,6 @@
     transform: translateY(-6px);
     box-shadow: 0 24px 60px rgba(0,0,0,0.1);
   }
-  .project-header {
-    padding: 2rem 2rem 1.5rem;
-    position: relative;
-  }
-  .project-header.heineken { background: linear-gradient(135deg, #1a3a2a 0%, #2d6a45 100%); }
-  .project-header.crise { background: linear-gradient(135deg, #1a2a3a 0%, #2d4a6a 100%); }
-  .project-header.photo { background: linear-gradient(135deg, #2a1a0a 0%, #6a3a1a 100%); }
-  .project-icon {
-    width: 52px; height: 52px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
-    background: rgba(255,255,255,0.15);
-    margin-bottom: 1.2rem;
-  }
   .project-tag {
     font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -376,10 +267,6 @@
     font-size: 1.5rem; font-weight: 400;
     color: #fff;
     line-height: 1.2;
-  }
-  .project-body {
-    padding: 1.8rem 2rem;
-    flex: 1; display: flex; flex-direction: column;
   }
   .project-desc {
     font-size: 0.9rem; color: var(--muted); line-height: 1.7;
@@ -406,27 +293,6 @@
   .project-link::after { content: '→'; }
 
   /* ── SKILLS ── */
-  .skills-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 4rem;
-    align-items: start;
-  }
-  .skills-intro p {
-    font-size: 0.95rem; color: var(--muted); line-height: 1.8;
-    margin-bottom: 1rem;
-  }
-  .skills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-  .skill-group {
-    background: var(--cream);
-    border-radius: 16px;
-    padding: 1.5rem;
-    border: 1px solid var(--border);
-  }
   .skill-group-title {
     font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
     text-transform: uppercase; color: var(--terracotta);
@@ -443,41 +309,7 @@
     flex-shrink: 0;
   }
 
-  /* ── SOFTSKILLS ── */
-  .soft-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
-  .soft-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 2rem 1.5rem;
-    border: 1px solid var(--border);
-    text-align: center;
-    transition: border-color .2s, transform .2s;
-  }
-  .soft-card:hover {
-    border-color: var(--sage);
-    transform: translateY(-3px);
-  }
-  .soft-emoji {
-    font-size: 2rem; margin-bottom: 0.8rem; display: block;
-  }
-  .soft-title {
-    font-family: 'Fraunces', serif;
-    font-size: 1.05rem; font-weight: 400;
-    color: var(--ink); margin-bottom: 0.4rem;
-  }
-  .soft-desc {
-    font-size: 0.8rem; color: var(--muted); line-height: 1.5;
-  }
-
   /* ── CERTIFICADOS ── */
-  .certs-filter {
-    display: flex; gap: 0.6rem; flex-wrap: wrap;
-    margin-bottom: 2.5rem;
-  }
   .filter-btn {
     padding: 0.45rem 1.2rem;
     border-radius: 100px;
@@ -503,13 +335,11 @@
     border: 1px solid var(--border);
     display: flex; align-items: flex-start; gap: 1rem;
     transition: transform .2s, box-shadow .2s;
-    cursor: default;
   }
   .cert-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 32px rgba(0,0,0,0.07);
   }
-  .cert-card[data-hidden="true"] { display: none; }
   .cert-badge {
     width: 44px; height: 44px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
@@ -529,16 +359,14 @@
     font-size: 0.9rem; font-weight: 600; color: var(--ink);
     line-height: 1.3; margin-bottom: 0.25rem;
   }
-  .cert-issuer {
-    font-size: 0.75rem; color: var(--muted);
-  }
+  .cert-issuer { font-size: 0.75rem; color: var(--muted); }
   .cert-year {
     font-size: 0.7rem; font-weight: 600;
     color: var(--terracotta);
     white-space: nowrap; align-self: center;
   }
 
-  /* ── EXPERIÊNCIA ── */
+  /* ── TIMELINE ── */
   .timeline {
     max-width: 720px;
     position: relative;
@@ -632,24 +460,18 @@
     padding: 1.5rem 4rem;
     display: flex; justify-content: space-between; align-items: center;
   }
-  footer p {
-    font-size: 0.78rem; color: rgba(245,242,238,0.4);
-  }
+  footer p { font-size: 0.78rem; color: rgba(245,242,238,0.4); }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  .fade-up {
-    opacity: 0;
-    animation: fadeUp .7s ease forwards;
-  }
+  .fade-up { opacity: 0; animation: fadeUp .7s ease forwards; }
   .delay-1 { animation-delay: .1s; }
   .delay-2 { animation-delay: .25s; }
   .delay-3 { animation-delay: .4s; }
   .delay-4 { animation-delay: .55s; }
-  .delay-5 { animation-delay: .7s; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
@@ -661,9 +483,8 @@
     .hero-photo-wrap { order: -1; display: flex; justify-content: center; }
     .hero-photo { width: 130px; height: 130px; }
     .hero-bg { width: 100%; clip-path: polygon(0 70%, 100% 50%, 100% 100%, 0 100%); opacity: 0.35; }
-    .sobre-grid, .skills-layout, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .sobre-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
     .sobre-stats { grid-template-columns: 1fr 1fr; }
-    .skills-grid { grid-template-columns: 1fr; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
   }
 </style>
@@ -687,21 +508,21 @@
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-  <div class="hero-content">
-    <span class="hero-eyebrow fade-up">Disponível · Remoto</span>
-    <h1 class="hero-name fade-up delay-1">Mirna Janaina<br>M. Morais de Oliveira</h1>
-    <p class="hero-tagline fade-up delay-2">UX Design · IA Aplicada · Dados · Gestão Ágil<br>Projetos reais. Entregas documentadas. Aprendizado contínuo.</p>
-    <div class="hero-insight fade-up delay-3">
-      <p>Trajetória administrativa sólida que me ensinou a <strong>pensar em sistemas</strong> antes de descobrir que isso tinha nome. Hoje traduzo essa bagagem em UX, prompts e processos que funcionam para pessoas reais.</p>
+    <div class="hero-content">
+      <span class="hero-eyebrow fade-up">Disponível · Remoto</span>
+      <h1 class="hero-name fade-up delay-1">Mirna Janaina<br>M. Morais de Oliveira</h1>
+      <p class="hero-tagline fade-up delay-2">UX Design · IA Aplicada · Dados · Gestão Ágil<br>Projetos reais. Entregas documentadas. Aprendizado contínuo.</p>
+      <div class="hero-insight fade-up delay-3">
+        <p>Trajetória administrativa sólida que me ensinou a <strong>pensar em sistemas</strong> antes de descobrir que isso tinha nome. Hoje traduzo essa bagagem em UX, prompts e processos que funcionam para pessoas reais.</p>
+      </div>
+      <div class="hero-cta fade-up delay-4">
+        <a href="mailto:jmoraisbhz@gmail.com" class="btn btn-primary">Falar comigo</a>
+        <a href="https://linkedin.com/in/mirnajmmoliveira" target="_blank" class="btn btn-outline">LinkedIn</a>
+      </div>
     </div>
-    <div class="hero-cta fade-up delay-4">
-      <a href="mailto:jmoraisbhz@gmail.com" class="btn btn-primary">Falar comigo</a>
-      <a href="https://linkedin.com/in/mirnajmmoliveira" target="_blank" class="btn btn-outline">LinkedIn</a>
+    <div class="hero-photo-wrap fade-up delay-3">
+      <img class="hero-photo" src="2026-04-26_20_05_17_686-030044.jpg" alt="Mirna Janaina M. Morais de Oliveira" onerror="this.style.display='none'">
     </div>
-  </div>
-  <div class="hero-photo-wrap fade-up delay-3">
-    <img class="hero-photo" src="2026-04-26_20_05_17_686-030044.jpg" alt="Mirna Janaina M. Morais de Oliveira" onerror="this.style.display='none'">
-  </div>
   </div>
 </section>
 
@@ -751,17 +572,17 @@
 
     <!-- CARD BORA — DESTAQUE FULL WIDTH -->
     <div class="project-card" style="border:2px solid var(--terracotta);box-shadow:0 0 0 4px rgba(196,112,74,0.1);">
-      <div class="project-header" style="background:linear-gradient(135deg,#2a1208 0%,#7a3018 50%,#c4704a 100%);position:relative;overflow:hidden;">
+      <div style="background:linear-gradient(135deg,#2a1208 0%,#7a3018 50%,#c4704a 100%);position:relative;overflow:hidden;padding:2rem 2rem 1.5rem;">
         <div style="position:absolute;top:14px;right:16px;background:#f8ede6;color:#712B13;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;padding:0.3rem 0.9rem;border-radius:100px;text-transform:uppercase;">Projeto destaque</div>
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
           <img src="https://mjmmoli.github.io/bora-logo.png" alt="Logo Bora" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,255,255,0.25);flex-shrink:0">
           <div>
-            <div class="project-tag" style="color:rgba(255,255,255,0.65)">UX Design · Pesquisa · Wireframes · Mockups · Business Canvas · Mobile</div>
-            <div class="project-title" style="font-size:1.5rem">Bora — App para Autônomos</div>
+            <div class="project-tag">UX Design · Pesquisa · Wireframes · Mockups · Business Canvas · Mobile</div>
+            <div class="project-title">Bora — App para Autônomos</div>
           </div>
         </div>
       </div>
-      <div class="project-body">
+      <div style="padding:1.8rem 2rem;flex:1;display:flex;flex-direction:column;">
         <p class="project-desc">Projeto completo de UX para app mobile de controle de horas e ganhos voltado a trabalhadores autônomos brasileiros: motoristas de app, diaristas, freelancers, professores particulares e entregadores. O único dado que nenhum app de entrega mostra: <strong>ganho líquido real por hora</strong>.</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:14px">
           <div style="display:flex;gap:6px;align-items:flex-start;font-size:0.82rem;color:var(--muted)"><span style="color:var(--terracotta);flex-shrink:0">✓</span>Círculo de Ouro + Business Model Canvas</div>
@@ -813,7 +634,7 @@
       </div>
     </div>
 
-    <!-- MINI: HEINEKEN -->
+    <!-- MINI: HEINEKEN — ATUALIZADO COM LINK DA PÁGINA DEDICADA -->
     <div class="project-card" style="flex-direction:row;align-items:stretch;padding:0;overflow:hidden">
       <div style="width:6px;flex-shrink:0;background:linear-gradient(180deg,#2d6a45,#1a3a2a)"></div>
       <div style="padding:1.2rem 1.5rem;flex:1;display:flex;flex-direction:column;gap:0.6rem">
@@ -826,8 +647,8 @@
           <span class="ptag">Prompt Engineering</span><span class="ptag">Anti-hallucination</span><span class="ptag">ERP/CRM Integration</span><span class="ptag">UX de IA</span>
         </div>
         <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap">
-          <a href="https://github.com/mjmmoli" target="_blank" class="project-link">Ver no GitHub</a>
-          <a href="Copiloto_Vendas_Heineken.pdf" target="_blank" class="btn-doc">📄 Documentação (PDF)</a>
+          <a href="heineken-project.html" style="display:inline-flex;align-items:center;gap:0.4rem;background:#1a3a2a;color:#fff;padding:0.45rem 1.1rem;border-radius:100px;font-size:0.8rem;font-weight:600;text-decoration:none;border:1.5px solid #2d6a45;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">🔗 Ver projeto completo</a>
+          <a href="https://github.com/mjmmoli/Assistente-vendas-Heineken" target="_blank" class="project-link">Ver no GitHub</a>
         </div>
       </div>
     </div>
@@ -894,7 +715,6 @@
       </div>
     </div>
 
-  </div> <!-- fim flex -->
   </div>
 </section>
 
@@ -977,55 +797,54 @@
       </div>
     </div>
   </div>
-
   <div style="margin-bottom:1rem">
     <button onclick="var g=document.getElementById('all-certs');var open=g.style.display!=='none';g.style.display=open?'none':'block';this.textContent=open?'Ver todas as 25+ certificações ↓':'▲ Ocultar certificações'" style="display:inline-flex;align-items:center;gap:0.5rem;background:transparent;border:1.5px solid var(--terracotta);color:var(--terracotta);padding:0.5rem 1.2rem;border-radius:100px;font-size:0.82rem;font-weight:600;cursor:pointer">Ver todas as 25+ certificações ↓</button>
   </div>
   <div id="all-certs" style="display:none">
-  <div class="certs-filter">
-    <button class="filter-btn active" onclick="filterCerts('all', this)">Todos</button>
-    <button class="filter-btn" onclick="filterCerts('ux', this)">UX Design</button>
-    <button class="filter-btn" onclick="filterCerts('agil', this)">Agile · Scrum</button>
-    <button class="filter-btn" onclick="filterCerts('ia', this)">IA · Dados</button>
-    <button class="filter-btn" onclick="filterCerts('dev', this)">Dev · Segurança</button>
-    <button class="filter-btn" onclick="filterCerts('gestao', this)">Gestão</button>
+    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2.5rem">
+      <button class="filter-btn active" onclick="filterCerts('all', this)">Todos</button>
+      <button class="filter-btn" onclick="filterCerts('ux', this)">UX Design</button>
+      <button class="filter-btn" onclick="filterCerts('agil', this)">Agile · Scrum</button>
+      <button class="filter-btn" onclick="filterCerts('ia', this)">IA · Dados</button>
+      <button class="filter-btn" onclick="filterCerts('dev', this)">Dev · Segurança</button>
+      <button class="filter-btn" onclick="filterCerts('gestao', this)">Gestão</button>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">🎨</div><div class="cert-info"><div class="cert-name">Google UX Design (Especialização)</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">📐</div><div class="cert-info"><div class="cert-name">Foundations of UX Design</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">🖼️</div><div class="cert-info"><div class="cert-name">Build Wireframes and Low-Fidelity Prototypes</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">🔬</div><div class="cert-info"><div class="cert-name">UX Research and Test Early Concepts</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">✨</div><div class="cert-info"><div class="cert-name">Create High-Fidelity Designs in Figma</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">🌐</div><div class="cert-info"><div class="cert-name">Build Dynamic User Interfaces for Websites</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">💚</div><div class="cert-info"><div class="cert-name">Design UX for Social Good</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ux"><div class="cert-badge google">🔄</div><div class="cert-info"><div class="cert-name">UX Design Process</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">🏅</div><div class="cert-info"><div class="cert-name">Scrum Master Certification (Especialização)</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">⚡</div><div class="cert-info"><div class="cert-name">Scrum Methodologies</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">🔗</div><div class="cert-info"><div class="cert-name">Scaling Agile and the Team-of-Teams</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="agil"><div class="cert-badge estacio">📋</div><div class="cert-info"><div class="cert-name">Gerenciamento de Projetos</div><div class="cert-issuer">Estácio de Sá</div></div><div class="cert-year">2025</div></div>
+      <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">🤝</div><div class="cert-info"><div class="cert-name">Combining Scrum with Other Agile Methodologies</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge santander">🤖</div><div class="cert-info"><div class="cert-name">Prompting Responsável: IA nos Negócios</div><div class="cert-issuer">Santander · Microsoft</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge dio" style="background:#e8f5e8">🍺</div><div class="cert-info"><div class="cert-name">Bootcamp Heineken — Inteligência Artificial Aplicada a Vendas (27h)</div><div class="cert-issuer">Heineken · DIO</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge dio">🧠</div><div class="cert-info"><div class="cert-name">Copiloto Especialista de Vendas (Projeto Final)</div><div class="cert-issuer">DIO · Bootcamp Heineken</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge dio">📊</div><div class="cert-info"><div class="cert-name">Boas-vindas à Aceleração: AI Reports com Excel, GPT Agents e Claude Code</div><div class="cert-issuer">DIO</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge dio">📊</div><div class="cert-info"><div class="cert-name">Introdução a AI Reports</div><div class="cert-issuer">DIO</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge aws">☁️</div><div class="cert-info"><div class="cert-name">AWS AI Practitioner — Semanas 1, 2 e 3</div><div class="cert-issuer">AWS · Trilha de Certificação</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge aws">☁️</div><div class="cert-info"><div class="cert-name">Nuvem e IA Para Empresas</div><div class="cert-issuer">AWS</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge jpf">🔮</div><div class="cert-info"><div class="cert-name">Fundamentos de IA, LLM e Agentes</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge jpf">💡</div><div class="cert-info"><div class="cert-name">Tecnologia e Inovação</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge estacio">📔</div><div class="cert-info"><div class="cert-name">Treinando IA com NotebookLM</div><div class="cert-issuer">Estácio / DIO</div></div><div class="cert-year">2025</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge santander">✍️</div><div class="cert-info"><div class="cert-name">Técnicas de Engenharia de Prompt</div><div class="cert-issuer">Santander · Microsoft</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="ia"><div class="cert-badge santander">✍️</div><div class="cert-info"><div class="cert-name">Aceleração: Excel, GPT Agents e Claude Code</div><div class="cert-issuer">Santander · Microsoft</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">🐍</div><div class="cert-info"><div class="cert-name">Introdução ao Python</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
+      <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">🐍</div><div class="cert-info"><div class="cert-name">Estrutura de Dados Python</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
+      <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">📈</div><div class="cert-info"><div class="cert-name">Ultimate NumPy</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
+      <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">🐼</div><div class="cert-info"><div class="cert-name">Pandas First Steps</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
+      <div class="cert-card" data-cat="dev"><div class="cert-badge cisco">🔒</div><div class="cert-info"><div class="cert-name">Introdução à Cibersegurança</div><div class="cert-issuer">Cisco</div></div><div class="cert-year">2025</div></div>
+      <div class="cert-card" data-cat="gestao"><div class="cert-badge estacio">❤️</div><div class="cert-info"><div class="cert-name">Inteligência Emocional e Liderança</div><div class="cert-issuer">Estácio de Sá</div></div><div class="cert-year">2026</div></div>
+      <div class="cert-card" data-cat="gestao"><div class="cert-badge jpf">♟️</div><div class="cert-info"><div class="cert-name">Pensamento Estratégico</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
+      <div class="cert-card" data-cat="gestao"><div class="cert-badge jpf">🧘</div><div class="cert-info"><div class="cert-name">Inteligência Emocional</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
+    </div>
   </div>
-  <div class="certs-grid">
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">🎨</div><div class="cert-info"><div class="cert-name">Google UX Design (Especialização)</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">📐</div><div class="cert-info"><div class="cert-name">Foundations of UX Design</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">🖼️</div><div class="cert-info"><div class="cert-name">Build Wireframes and Low-Fidelity Prototypes</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">🔬</div><div class="cert-info"><div class="cert-name">UX Research and Test Early Concepts</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">✨</div><div class="cert-info"><div class="cert-name">Create High-Fidelity Designs in Figma</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">🌐</div><div class="cert-info"><div class="cert-name">Build Dynamic User Interfaces for Websites</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">💚</div><div class="cert-info"><div class="cert-name">Design UX for Social Good</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ux"><div class="cert-badge google">🔄</div><div class="cert-info"><div class="cert-name">UX Design Process</div><div class="cert-issuer">Google · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">🏅</div><div class="cert-info"><div class="cert-name">Scrum Master Certification (Especialização)</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">⚡</div><div class="cert-info"><div class="cert-name">Scrum Methodologies</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">🔗</div><div class="cert-info"><div class="cert-name">Scaling Agile and the Team-of-Teams</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="agil"><div class="cert-badge estacio">📋</div><div class="cert-info"><div class="cert-name">Gerenciamento de Projetos</div><div class="cert-issuer">Estácio de Sá</div></div><div class="cert-year">2025</div></div>
-    <div class="cert-card" data-cat="agil"><div class="cert-badge coursera">🤝</div><div class="cert-info"><div class="cert-name">Combining Scrum with Other Agile Methodologies</div><div class="cert-issuer">LearnQuest · Coursera</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge santander">🤖</div><div class="cert-info"><div class="cert-name">Prompting Responsável: IA nos Negócios</div><div class="cert-issuer">Santander · Microsoft</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge dio" style="background:#e8f5e8">🍺</div><div class="cert-info"><div class="cert-name">Bootcamp Heineken — Inteligência Artificial Aplicada a Vendas (27h)</div><div class="cert-issuer">Heineken · DIO</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge dio">🧠</div><div class="cert-info"><div class="cert-name">Copiloto Especialista de Vendas (Projeto Final)</div><div class="cert-issuer">DIO · Bootcamp Heineken</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge dio">📊</div><div class="cert-info"><div class="cert-name">Boas-vindas à Aceleração: AI Reports com Excel, GPT Agents e Claude Code</div><div class="cert-issuer">DIO</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge dio">📊</div><div class="cert-info"><div class="cert-name">Introdução a AI Reports</div><div class="cert-issuer">DIO</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge aws">☁️</div><div class="cert-info"><div class="cert-name">AWS AI Practitioner — Semanas 1, 2 e 3</div><div class="cert-issuer">AWS · Trilha de Certificação</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge aws">☁️</div><div class="cert-info"><div class="cert-name">Nuvem e IA Para Empresas</div><div class="cert-issuer">AWS</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge jpf">🔮</div><div class="cert-info"><div class="cert-name">Fundamentos de IA, LLM e Agentes</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge jpf">💡</div><div class="cert-info"><div class="cert-name">Tecnologia e Inovação</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge estacio">📔</div><div class="cert-info"><div class="cert-name">Treinando IA com NotebookLM</div><div class="cert-issuer">Estácio / DIO</div></div><div class="cert-year">2025</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge santander">✍️</div><div class="cert-info"><div class="cert-name">Técnicas de Engenharia de Prompt</div><div class="cert-issuer">Santander · Microsoft</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="ia"><div class="cert-badge santander">✍️</div><div class="cert-info"><div class="cert-name">Aceleração: Excel, GPT Agents e Claude Code</div><div class="cert-issuer">Santander · Microsoft</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">🐍</div><div class="cert-info"><div class="cert-name">Introdução ao Python</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
-    <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">🐍</div><div class="cert-info"><div class="cert-name">Estrutura de Dados Python</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
-    <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">📈</div><div class="cert-info"><div class="cert-name">Ultimate NumPy</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
-    <div class="cert-card" data-cat="dev"><div class="cert-badge codefinity">🐼</div><div class="cert-info"><div class="cert-name">Pandas First Steps</div><div class="cert-issuer">Codefinity</div></div><div class="cert-year">2024</div></div>
-    <div class="cert-card" data-cat="dev"><div class="cert-badge cisco">🔒</div><div class="cert-info"><div class="cert-name">Introdução à Cibersegurança</div><div class="cert-issuer">Cisco</div></div><div class="cert-year">2025</div></div>
-    <div class="cert-card" data-cat="gestao"><div class="cert-badge estacio">❤️</div><div class="cert-info"><div class="cert-name">Inteligência Emocional e Liderança</div><div class="cert-issuer">Estácio de Sá</div></div><div class="cert-year">2026</div></div>
-    <div class="cert-card" data-cat="gestao"><div class="cert-badge jpf">♟️</div><div class="cert-info"><div class="cert-name">Pensamento Estratégico</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
-    <div class="cert-card" data-cat="gestao"><div class="cert-badge jpf">🧘</div><div class="cert-info"><div class="cert-name">Inteligência Emocional</div><div class="cert-issuer">JPF</div></div><div class="cert-year">2025</div></div>
-  </div>
-  </div> <!-- fim all-certs -->
 </section>
 
 <!-- EXPERIÊNCIA -->
@@ -1094,7 +913,7 @@
   <div class="contact-grid">
     <div>
       <h2 class="section-title">Vamos <em>conversar</em><br>sobre o próximo passo?</h2>
-      <p class="contact-text">Estou disponível para oportunidades em IA Aplicada, Gestão Ágil, UX Design e Produto — remoto. Busco o lugar certo para contribuir, crescer e construir junto com a equipe.</p>
+      <p class="contact-text">Estou disponível para oportunidades em IA Aplicada, Gestão Ágil, UX Design e Produto — remoto. Não busco a vaga perfeita. Busco o lugar certo para aprender, contribuir e crescer junto com a equipe.</p>
     </div>
     <div class="contact-links">
       <a href="mailto:jmoraisbhz@gmail.com" class="contact-link">
@@ -1124,41 +943,11 @@
 </footer>
 
 <script>
-  function toggleVideo(btn) {
-    var container = btn.nextElementSibling;
-    var wrapper = container.querySelector('div:last-child');
-    if (container.style.display === 'none') {
-      container.style.display = 'block';
-      btn.textContent = '▲ Ocultar vídeo';
-      if (!wrapper.querySelector('iframe')) {
-        var iframe = document.createElement('iframe');
-        iframe.src = 'https://player.vimeo.com/video/58935192?title=0&byline=0&portrait=0&autoplay=1';
-        iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0;';
-        iframe.allow = 'autoplay; fullscreen; picture-in-picture';
-        iframe.allowFullscreen = true;
-        wrapper.style.position = 'relative';
-        wrapper.style.paddingBottom = '56.25%';
-        wrapper.style.height = '0';
-        wrapper.style.overflow = 'hidden';
-        wrapper.appendChild(iframe);
-      }
-    } else {
-      container.style.display = 'none';
-      btn.textContent = '🎬 Ver curadoria — CCBB Brasília';
-      var iframe = wrapper.querySelector('iframe');
-      if (iframe) iframe.remove();
-    }
-  }
-
   function filterCerts(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.cert-card').forEach(card => {
-      if (cat === 'all' || card.dataset.cat === cat) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
     });
   }
 
@@ -1171,7 +960,7 @@
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.project-card, .cert-card, .stat-card, .skill-group, .soft-card, .timeline-item').forEach(el => {
+  document.querySelectorAll('.project-card, .cert-card, .stat-card, .timeline-item').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity .5s ease, transform .5s ease';
