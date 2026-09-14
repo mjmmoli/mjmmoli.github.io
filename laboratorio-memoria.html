@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratório de Memória — Curva do Esquecimento e Repetição Espaçada</title>
+  
+  <style>
+    :root {
+      --bg-main: #0b1120;
+      --bg-panel: #111a2e;
+      --bg-panel-hover: #16223c;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(124, 156, 255, 0.6);
+      --text-main: #e6edf7;
+      --text-muted: #8b9bb4;
+      --color-positive: #4ecdc4;
+      --color-positive-glow: rgba(78, 205, 196, 0.25);
+      --color-negative: #ff6b6b;
+      --color-warning: #ffd166;
+      --color-accent: #7c9cff;
+      --color-accent-hover: #9bb3ff;
+      --radius-panel: 14px;
+      --radius-elem: 10px;
+      --font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1240px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    header.app-header {
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    header.app-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    header.app-header p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr 280px;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-panel);
+      padding: 1.25rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1.15rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-group label .value-badge {
+      color: var(--color-accent);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    input[type="text"] {
+      background: #0d1527;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-elem);
+      color: var(--text-main);
+      padding: 0.75rem 0.85rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 2px var(--border-focus);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #1c2b4a;
+      border-radius: 4px;
+      outline: none;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      box-shadow: 0 0 10px rgba(124, 156, 255, 0.6);
+      cursor: pointer;
+      transition: transform 150ms ease, background-color 150ms ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: var(--color-accent-hover);
+    }
+
+    input[type="range"]:focus-visible::-webkit-slider-thumb {
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .radio-group-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.4rem;
+      background: #0d1527;
+      padding: 0.3rem;
+      border-radius: var(--radius-elem);
+      border: 1px solid var(--border-color);
+    }
+
+    .pill-label {
+      cursor: pointer;
+      text-align: center;
+      padding: 0.45rem 0.2rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 7px;
+      color: var(--text-muted);
+      transition: all 150ms ease;
+      user-select: none;
+    }
+
+    .pill-label:hover {
+      color: var(--text-main);
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    input[type="radio"]:checked + .pill-label {
+      background: var(--color-accent);
+      color: #0b1120;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(124, 156, 255, 0.4);
+    }
+
+    input[type="radio"]:focus-visible + .pill-label {
+      outline: 2px solid #ffffff;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, #7c9cff 0%, #5d81f5 100%);
+      color: #0b1120;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: var(--radius-elem);
+      cursor: pointer;
+      transition: filter 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+      box-shadow: 0 4px 14px rgba(124, 156, 255, 0.35);
+      margin-top: 0.5rem;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(124, 156, 255, 0.45);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-primary:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .center-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .demo-step-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      min-height: 1.1rem;
+      margin-bottom: 0.25rem;
+      transition: opacity 200ms ease;
+    }
+
+    .impact-phrase {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: left;
+      line-height: 1.35;
+      margin-bottom: 0.85rem;
+      transition: color 300ms ease;
+    }
+
+    .graph-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 260px;
+      background: #0d1527;
+      border-radius: var(--radius-panel);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    canvas#grafico {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .graph-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.4rem;
+    }
+
+    .graph-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 70%;
+    }
+
+    .graph-badge {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    .graph-tooltip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: rgba(13, 21, 39, 0.94);
+      border: 1px solid rgba(124, 156, 255, 0.4);
+      backdrop-filter: blur(6px);
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -120%);
+      transition: opacity 120ms ease;
+      white-space: nowrap;
+      z-index: 10;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+
+    .timeline-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .timeline-header-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .timeline-count-badge {
+      font-size: 0.82rem;
+      color: var(--color-positive);
+      background: rgba(78, 205, 196, 0.12);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .timeline-exam-hint {
+      font-size: 0.85rem;
+      color: #9cb3d5;
+      font-weight: 500;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+      gap: 0.35rem;
+      transition: opacity 200ms ease;
+    }
+
+    .timeline-cell {
+      height: 38px;
+      min-width: 32px;
+      background: #0d1527;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 150ms ease;
+      position: relative;
+    }
+
+    .timeline-cell:hover:not(:disabled) {
+      border-color: rgba(78, 205, 196, 0.4);
+      color: var(--text-main);
+      background: #141f38;
+    }
+
+    .timeline-cell.active {
+      background: var(--color-positive);
+      border-color: var(--color-positive);
+      color: #0b1120;
+      font-weight: 800;
+      box-shadow: 0 0 10px var(--color-positive-glow);
+    }
+
+    .timeline-cell.active::after {
+      content: "";
+      width: 4px;
+      height: 4px;
+      background: #0b1120;
+      border-radius: 50%;
+      margin-top: 1px;
+    }
+
+    .timeline-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.48rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--color-accent);
+    }
+
+    .btn-demo-accent {
+      background: rgba(124, 156, 255, 0.12);
+      border-color: rgba(124, 156, 255, 0.35);
+      color: #9cb8ff;
+    }
+
+    .btn-demo-accent:hover:not(:disabled) {
+      background: rgba(124, 156, 255, 0.22);
+      border-color: rgba(124, 156, 255, 0.6);
+      color: #ffffff;
+    }
+
+    button:disabled, input:disabled {
+      opacity: 0.45 !important;
+      cursor: not-allowed !important;
+    }
+
+    .timeline-notice {
+      font-size: 0.85rem;
+      color: var(--color-warning);
+      min-height: 1.25rem;
+      font-weight: 600;
+      transition: opacity 200ms ease;
+    }
+
+    .timeline-disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .compare-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0d1527;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-elem);
+      border: 1px solid var(--border-color);
+      margin-top: 0.25rem;
+    }
+
+    .compare-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .compare-label span {
+      font-size: 0.75rem;
+      font-weight: normal;
+      color: var(--text-muted);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #1e293b;
+      transition: 200ms;
+      border-radius: 26px;
+      border: 1px solid var(--border-color);
+    }
+
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #ffffff;
+      transition: 200ms;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-toggle {
+      background-color: var(--color-accent);
+    }
+
+    input:checked + .slider-toggle:before {
+      transform: translateX(20px);
+    }
+
+    input:focus-visible + .slider-toggle {
+      box-shadow: 0 0 0 2px #ffffff;
+    }
+
+    .comparison-banner {
+      font-size: 0.85rem;
+      background: rgba(255, 209, 102, 0.1);
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      color: var(--color-warning);
+      padding: 0.65rem 0.9rem;
+      border-radius: var(--radius-elem);
+      line-height: 1.4;
+      display: none;
+    }
+
+    .comparison-banner.visible {
+      display: block;
+    }
+
+    .cards-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .metric-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-panel);
+      padding: 1.2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: transform 150ms ease, border-color 150ms ease;
+    }
+
+    .metric-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      transition: color 300ms ease;
+    }
+
+    .metric-value.negativo {
+      color: var(--color-negative);
+    }
+
+    .metric-value.accent {
+      color: var(--color-accent);
+    }
+
+    .metric-card.resultado-card {
+      background: linear-gradient(180deg, #111a2e 0%, #15223e 100%);
+      border-color: rgba(124, 156, 255, 0.2);
+    }
+
+    .metric-result-text {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.45;
+    }
+
+    .details-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-panel);
+      padding: 1.15rem 1.4rem;
+      margin-top: 0.5rem;
+    }
+
+    details summary {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      transition: color 150ms ease;
+    }
+
+    details summary:hover {
+      color: var(--color-accent-hover);
+    }
+
+    details[open] summary {
+      margin-bottom: 0.85rem;
+    }
+
+    .details-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .details-content strong {
+      color: var(--text-main);
+    }
+
+    footer.app-footer {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    @media (max-width: 899px) {
+      body {
+        padding: 1rem 0.75rem 2rem;
+      }
+
+      header.app-header h1 {
+        font-size: 1.7rem;
+      }
+
+      header.app-header p {
+        font-size: 0.92rem;
+      }
+
+      .dashboard-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .panel-input-order {
+        order: 1;
+      }
+
+      .center-column {
+        order: 2;
+      }
+
+      .cards-column {
+        order: 3;
+      }
+
+      .impact-phrase {
+        font-size: 18px;
+      }
+
+      .metric-value {
+        font-size: 2rem;
+      }
+
+      .timeline-cell {
+        height: 36px;
+        min-width: 32px;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Cabeçalho -->
+    <header class="app-header">
+      <h1>🧠 Laboratório de Memória</h1>
+      <p>Descubra quanto você realmente vai lembrar — e como mudar isso.</p>
+    </header>
+
+    <!-- Grid do aplicativo -->
+    <main class="dashboard-grid">
+
+      <!-- Painel de entrada (coluna esquerda) -->
+      <section class="panel panel-input-order" aria-labelledby="titulo-painel-entrada">
+        <h2 class="panel-title" id="titulo-painel-entrada">Configuração do Estudo</h2>
+        
+        <div class="form-group">
+          <label for="conceito">O que você está estudando?</label>
+          <input type="text" id="conceito" maxlength="40" value="Fotossíntese" placeholder="Ex: Fotossíntese, Leis de Newton...">
+        </div>
+
+        <!-- Seletor de Horizonte -->
+        <div class="form-group">
+          <label id="label-horizonte">Minha prova é em:</label>
+          <div class="radio-group-pills" role="radiogroup" aria-labelledby="label-horizonte">
+            <div>
+              <input type="radio" id="horiz7" name="horizonte" value="7">
+              <label for="horiz7" class="pill-label">7 dias</label>
+            </div>
+            <div>
+              <input type="radio" id="horiz15" name="horizonte" value="15">
+              <label for="horiz15" class="pill-label">15 dias</label>
+            </div>
+            <div>
+              <input type="radio" id="horiz30" name="horizonte" value="30" checked>
+              <label for="horiz30" class="pill-label">30 dias</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="entendimento">
+            <span>Quão bem você entendeu hoje?</span>
+            <span class="value-badge" id="badgeEntendimento">7/10</span>
+          </label>
+          <input type="range" id="entendimento" min="1" max="10" step="1" value="7" aria-valuemin="1" aria-valuemax="10" aria-valuenow="7">
+        </div>
+
+        <div class="form-group">
+          <label id="label-dificuldade">Dificuldade percebida</label>
+          <div class="radio-group-pills" role="radiogroup" aria-labelledby="label-dificuldade">
+            <div>
+              <input type="radio" id="difFacil" name="dificuldade" value="Facil">
+              <label for="difFacil" class="pill-label">Fácil</label>
+            </div>
+            <div>
+              <input type="radio" id="difMedio" name="dificuldade" value="Medio" checked>
+              <label for="difMedio" class="pill-label">Médio</label>
+            </div>
+            <div>
+              <input type="radio" id="difDificil" name="dificuldade" value="Dificil">
+              <label for="difDificil" class="pill-label">Difícil</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" id="btnCalcular">Recalcular experimento</button>
+      </section>
+
+      <!-- Coluna Central: Gráfico e Linha do Tempo -->
+      <section class="center-column" aria-label="Simulação visual de retenção">
+        
+        <!-- Bloco do Gráfico -->
+        <div class="panel">
+          <div class="graph-header">
+            <h2 class="graph-title" id="tituloGrafico">Retenção de: Fotossíntese</h2>
+            <span class="graph-badge" id="graphBadge">Projeção de 30 dias</span>
+          </div>
+
+          <div class="demo-step-label" id="demoLegenda" aria-live="polite"></div>
+
+          <p class="impact-phrase" id="fraseImpacto" aria-live="polite">
+            Calculando projeção...
+          </p>
+
+          <div class="graph-container" id="graphWrapper">
+            <canvas id="grafico" role="img" aria-label="Gráfico interativo da Curva do Esquecimento de Ebbinghaus"></canvas>
+            <div class="graph-tooltip" id="graphTooltip" aria-hidden="true"></div>
+          </div>
+          
+          <p class="sr-only" id="resumoGrafico" aria-live="polite">
+            Sem revisões, a retenção no dia da prova cai drasticamente. Com revisões espaçadas, a retenção é preservada.
+          </p>
+
+          <div class="comparison-banner" id="bannerComparacao" role="status" aria-live="polite">
+            Amontoada: 30% no dia 30 • Espaçada: 88% no dia 30 — mesmo tempo investido (1h15).
+          </div>
+        </div>
+
+        <!-- Linha do tempo -->
+        <div class="panel timeline-panel" id="painelTimelineContainer">
+          <div class="timeline-header">
+            <h3 class="timeline-header-title" id="timelineHeaderTitle">Linha do Tempo (dias 1 a 28)</h3>
+            <span class="timeline-count-badge" id="timelineContador">5 revisões • 1h15</span>
+          </div>
+
+          <p class="timeline-exam-hint" id="timelineExamHint">
+            Dia 30 = dia da prova. Onde você revisa antes disso?
+          </p>
+
+          <div class="timeline-grid" id="timeline" role="group" aria-label="Dias para revisão">
+            <!-- Células geradas dinamicamente -->
+          </div>
+
+          <div class="timeline-notice" id="timelineAviso" aria-live="polite"></div>
+
+          <div class="timeline-actions">
+            <button type="button" class="btn-secondary btn-demo-accent" id="btnDemo">▶ Ver a história em 10s</button>
+            <button type="button" class="btn-secondary" id="btnSugerir">Sugerir revisões ideais</button>
+            <button type="button" class="btn-secondary" id="btnLimpar">Limpar revisões</button>
+          </div>
+
+          <div class="compare-container">
+            <div class="compare-label">
+              <span>Estratégias de aprendizagem</span>
+              Comparar estratégias
+            </div>
+            <label class="switch" for="modoComparar">
+              <input type="checkbox" id="modoComparar">
+              <span class="slider-toggle"></span>
+            </label>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Cartões de Resultados (coluna direita) -->
+      <section class="cards-column" aria-label="Resultados projetados de retenção">
+        
+        <div class="metric-card" id="cardSemRevisao">
+          <span class="metric-label" id="labelSemRevisao">Sem revisão no dia 30</span>
+          <span class="metric-value negativo" id="valSemRevisao">menos de 1%</span>
+        </div>
+
+        <div class="metric-card" id="cardComRevisao">
+          <span class="metric-label" id="labelComRevisao">Com revisões no dia 30</span>
+          <span class="metric-value" id="valComRevisao" style="color: #4ecdc4;">88%</span>
+        </div>
+
+        <div class="metric-card" id="cardTempo">
+          <span class="metric-label">Tempo investido</span>
+          <span class="metric-value accent" id="valTempoInvestido">1h15</span>
+        </div>
+
+        <div class="metric-card resultado-card" id="cardResultado">
+          <span class="metric-label">Resultado</span>
+          <p class="metric-result-text" id="valResultado">Calculando resultado...</p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Explicação didática -->
+    <aside class="details-panel">
+      <details>
+        <summary>Como isso funciona?</summary>
+        <div class="details-content">
+          <p>
+            <strong>A Curva do Esquecimento:</strong> Quando você aprende algo novo, seu cérebro começa a descartar as informações rapidamente nas primeiras 24 horas caso não perceba utilidade imediata. Esse declínio exponencial foi descoberto em 1885 pelo psicólogo Hermann Ebbinghaus e explica por que esquecemos quase tudo poucos dias após uma aula tradicional.
+          </p>
+          <p>
+            <strong>O Poder da Repetição Espaçada:</strong> Cada vez que você revisita o conteúdo antes que ele se apague por completo, o cérebro recebe um sinal de alerta de relevância. O ato de recuperar a memória reativa conexões neurais e aumenta a estabilidade da memória ($S$). Uma revisão rende mais estabilidade quando feita no momento certo, e não imediatamente após o estudo.
+          </p>
+          <p>
+            <strong>Dica prática de aplicação:</strong> Em vez de passar horas estudando de uma vez só na véspera da prova (o ineficiente <em>cramming</em> amontoado), divida seu tempo em pequenos blocos de 15 minutos: faça revisões espaçadas ao longo do período até o dia da prova. Você chegará ao exame lembrando a maior parte do conteúdo com muito menos esforço.
+          </p>
+        </div>
+      </details>
+    </aside>
+
+    <footer class="app-footer">
+      <p>Baseado na Curva do Esquecimento de Hermann Ebbinghaus (1885). Os valores são uma simulação didática, não uma medição real.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // Configuração de estratégias por horizonte
+      const ESTRATEGIAS_HORIZONTE = {
+        7: {
+          espacada: [1, 3, 5],
+          cram: [1, 1.25, 1.5],
+          rotulos: [0, 1, 2, 3, 4, 5, 6, 7]
+        },
+        15: {
+          espacada: [1, 3, 7, 12],
+          cram: [1, 1.5, 2, 2.5],
+          rotulos: [0, 3, 6, 9, 12, 15]
+        },
+        30: {
+          espacada: [1, 3, 7, 14, 21],
+          cram: [1, 1.5, 2, 2.5, 3],
+          rotulos: [0, 5, 10, 15, 20, 25, 30]
+        }
+      };
+
+      // ===== Estado da aplicação =====
+      const estado = {
+        conceito: 'Fotossíntese',
+        horizonte: 30, // 7 | 15 | 30
+        entendimento: 7,
+        dificuldade: 'Medio', // 'Facil' | 'Medio' | 'Dificil'
+        revisoes: [1, 3, 7, 14, 21],
+        revisoesGuardadas: [1, 3, 7, 14, 21],
+        modoComparar: false,
+        demoEmExecucao: false,
+        timersDemo: []
+      };
+
+      // Armazenamento de transições e animações
+      const animacoes = {
+        curvaAtualSem: new Float32Array(301).fill(0),
+        curvaAtualCom: new Float32Array(301).fill(0),
+        curvaAtualCram: new Float32Array(301).fill(0),
+        valorExibidoSem: 0,
+        valorExibidoCom: 0,
+        curvaOrigemSem: new Float32Array(301).fill(0),
+        curvaOrigemCom: new Float32Array(301).fill(0),
+        curvaOrigemCram: new Float32Array(301).fill(0),
+        curvaAlvoSem: new Float32Array(301).fill(0),
+        curvaAlvoCom: new Float32Array(301).fill(0),
+        curvaAlvoCram: new Float32Array(301).fill(0),
+        primeiraRenderizacao: true
+      };
+
+      const dom = {
+        conceito: document.getElementById('conceito'),
+        horiz7: document.getElementById('horiz7'),
+        horiz15: document.getElementById('horiz15'),
+        horiz30: document.getElementById('horiz30'),
+        entendimento: document.getElementById('entendimento'),
+        badgeEntendimento: document.getElementById('badgeEntendimento'),
+        difFacil: document.getElementById('difFacil'),
+        difMedio: document.getElementById('difMedio'),
+        difDificil: document.getElementById('difDificil'),
+        btnCalcular: document.getElementById('btnCalcular'),
+        tituloGrafico: document.getElementById('tituloGrafico'),
+        graphBadge: document.getElementById('graphBadge'),
+        demoLegenda: document.getElementById('demoLegenda'),
+        fraseImpacto: document.getElementById('fraseImpacto'),
+        grafico: document.getElementById('grafico'),
+        graphWrapper: document.getElementById('graphWrapper'),
+        graphTooltip: document.getElementById('graphTooltip'),
+        resumoGrafico: document.getElementById('resumoGrafico'),
+        bannerComparacao: document.getElementById('bannerComparacao'),
+        timelineHeaderTitle: document.getElementById('timelineHeaderTitle'),
+        timelineExamHint: document.getElementById('timelineExamHint'),
+        timeline: document.getElementById('timeline'),
+        timelineContador: document.getElementById('timelineContador'),
+        timelineAviso: document.getElementById('timelineAviso'),
+        btnDemo: document.getElementById('btnDemo'),
+        btnSugerir: document.getElementById('btnSugerir'),
+        btnLimpar: document.getElementById('btnLimpar'),
+        modoComparar: document.getElementById('modoComparar'),
+        cardSemRevisao: document.getElementById('cardSemRevisao'),
+        cardComRevisao: document.getElementById('cardComRevisao'),
+        labelSemRevisao: document.getElementById('labelSemRevisao'),
+        labelComRevisao: document.getElementById('labelComRevisao'),
+        cardTempo: document.getElementById('cardTempo'),
+        cardResultado: document.getElementById('cardResultado'),
+        valSemRevisao: document.getElementById('valSemRevisao'),
+        valComRevisao: document.getElementById('valComRevisao'),
+        valTempoInvestido: document.getElementById('valTempoInvestido'),
+        valResultado: document.getElementById('valResultado')
+      };
+
+      const ctx = dom.grafico.getContext('2d');
+
+      /**
+       * Calcula a estabilidade inicial S0 com as bases calibradas
+       * Fácil = 8.0 | Médio = 5.0 | Difícil = 3.0
+       */
+      function calcularS0(dificuldade, entendimento) {
+        const bases = { Facil: 8.0, Medio: 5.0, Dificil: 3.0 };
+        const base = bases[dificuldade] !== undefined ? bases[dificuldade] : 5.0;
+        return base * (0.6 + 0.08 * entendimento);
+      }
+
+      /**
+       * Retorna o fator multiplicador por dificuldade
+       */
+      function obterFator(dificuldade) {
+        const fatores = { Facil: 2.8, Medio: 2.4, Dificil: 2.0 };
+        return fatores[dificuldade] !== undefined ? fatores[dificuldade] : 2.4;
+      }
+
+      /**
+       * Função pura que calcula curva de retenção de t=0 a t=horizonte com 301 pontos.
+       */
+      function calcularCurva(S0, fator, revisoes, horizonte) {
+        const revs = [...new Set(revisoes)]
+          .filter(d => typeof d === 'number' && !isNaN(d) && d > 0 && d <= horizonte)
+          .sort((a, b) => a - b);
+
+        const estagios = [];
+        let S = S0;
+        let ultimo = 0;
+
+        for (let i = 0; i < revs.length; i++) {
+          const d = revs[i];
+          const deltaT = d - ultimo;
+          
+          const proporcao = Math.min(1, deltaT / S);
+          S = S * (1 + (fator - 1) * Math.sqrt(proporcao));
+
+          ultimo = d;
+          estagios.push({ dia: d, S: S });
+        }
+
+        const pontos = new Array(301);
+        const passo = horizonte / 300;
+
+        for (let i = 0; i <= 300; i++) {
+          const t = i * passo;
+          let r = 100;
+
+          if (revs.length === 0 || t < revs[0]) {
+            r = 100 * Math.exp(-t / S0);
+          } else {
+            let indiceEstagio = -1;
+            for (let j = 0; j < revs.length; j++) {
+              if (revs[j] <= t) {
+                indiceEstagio = j;
+              } else {
+                break;
+              }
+            }
+
+            if (indiceEstagio >= 0) {
+              const estagioAtivo = estagios[indiceEstagio];
+              const tDecorrido = t - estagioAtivo.dia;
+              r = 100 * Math.exp(-tDecorrido / estagioAtivo.S);
+            }
+          }
+
+          r = Math.min(100, Math.max(0, r));
+          pontos[i] = { t: t, r: r };
+        }
+
+        return pontos;
+      }
+
+      function formatarTempo(qtdRevisoes) {
+        const totalMinutos = qtdRevisoes * 15;
+        if (totalMinutos < 60) {
+          return totalMinutos + ' min';
+        }
+        const horas = Math.floor(totalMinutos / 60);
+        const restoMin = totalMinutos % 60;
+        return restoMin > 0 ? `${horas}h${restoMin < 10 ? '0' : ''}${restoMin}` : `${horas}h`;
+      }
+
+      function calcularMetricas(curvaSem, curvaCom, qtdRevisoes, horizonte) {
+        const pFinalSem = curvaSem[300] ? curvaSem[300].r : 0;
+        const pFinalCom = curvaCom[300] ? curvaCom[300].r : 0;
+
+        const retFinalSem = pFinalSem < 1 ? 0 : Math.round(pFinalSem);
+        const retFinalCom = Math.round(pFinalCom);
+
+        const tempoInvestido = formatarTempo(qtdRevisoes);
+        const textoSem = retFinalSem === 0 ? 'menos de 1%' : `${retFinalSem}%`;
+
+        let fraseResumo = '';
+        if (qtdRevisoes === 0) {
+          fraseResumo = 'Adicione revisões na linha do tempo para ver a diferença.';
+        } else {
+          fraseResumo = `Com ${tempoInvestido} de revisões, você chega à prova lembrando ${retFinalCom}% em vez de ${textoSem}.`;
+        }
+
+        return {
+          retFinalSem,
+          retFinalCom,
+          tempoInvestido,
+          fraseResumo,
+          textoSem
+        };
+      }
+
+      function easeOutCubic(x) {
+        return 1 - Math.pow(1 - x, 3);
+      }
+
+      let canvasW = 0;
+      let canvasH = 0;
+      const margem = { top: 34, right: 28, bottom: 44, left: 48 };
+
+      function redimensionarCanvas() {
+        const rect = dom.graphWrapper.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvasW = rect.width;
+        canvasH = rect.height;
+
+        dom.grafico.width = canvasW * dpr;
+        dom.grafico.height = canvasH * dpr;
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function desenharGradeEEixos(horizonte) {
+        ctx.save();
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = 'transparent';
+
+        const plotW = canvasW - margem.left - margem.right;
+        const plotH = canvasH - margem.top - margem.bottom;
+
+        // Linhas de grade horizontais (0, 25, 50, 75, 100%)
+        const niveisY = [0, 25, 50, 75, 100];
+        ctx.font = '11px system-ui, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+
+        niveisY.forEach(nivel => {
+          const y = margem.top + plotH - (nivel / 100) * plotH;
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+          ctx.lineWidth = 1;
+          ctx.moveTo(margem.left, y);
+          ctx.lineTo(margem.left + plotW, y);
+          ctx.stroke();
+
+          ctx.fillStyle = '#8b9bb4';
+          ctx.fillText(nivel + '%', margem.left - 8, y);
+        });
+
+        // Linhas de grade verticais dinâmicas por horizonte
+        const configHoriz = ESTRATEGIAS_HORIZONTE[horizonte] || ESTRATEGIAS_HORIZONTE[30];
+        const diasX = configHoriz.rotulos;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+
+        diasX.forEach(dia => {
+          const x = margem.left + (dia / horizonte) * plotW;
+          const ehUltimo = dia === horizonte;
+          ctx.beginPath();
+          ctx.strokeStyle = ehUltimo ? 'rgba(124, 156, 255, 0.22)' : 'rgba(255, 255, 255, 0.07)';
+          ctx.lineWidth = 1;
+          ctx.moveTo(x, margem.top);
+          ctx.lineTo(x, margem.top + plotH);
+          ctx.stroke();
+
+          ctx.fillStyle = ehUltimo ? '#7c9cff' : '#8b9bb4';
+          ctx.fillText(ehUltimo ? `Dia ${dia} (Prova)` : 'Dia ' + dia, x, margem.top + plotH + 8);
+        });
+
+        // Título do Eixo Y
+        ctx.fillStyle = '#8b9bb4';
+        ctx.font = '10px system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('Retenção (%)', margem.left, margem.top - 16);
+
+        ctx.restore();
+      }
+
+      function desenharLegenda(modoComparar) {
+        ctx.save();
+        ctx.shadowBlur = 0;
+        ctx.font = '11px system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+
+        const itens = modoComparar ? [
+          { rotulo: 'Espaçada (ideal)', cor: '#4ecdc4' },
+          { rotulo: 'Amontoada (tudo de uma vez)', cor: '#ffd166' },
+          { rotulo: 'Sem revisão', cor: '#ff6b6b' }
+        ] : [
+          { rotulo: 'Com revisões', cor: '#4ecdc4' },
+          { rotulo: 'Sem revisão', cor: '#ff6b6b' }
+        ];
+
+        let xOffset = canvasW - margem.right;
+        for (let i = itens.length - 1; i >= 0; i--) {
+          const item = itens[i];
+          const textW = ctx.measureText(item.rotulo).width;
+          const blocoW = textW + 28;
+          xOffset -= blocoW;
+
+          ctx.beginPath();
+          ctx.strokeStyle = item.cor;
+          ctx.lineWidth = 3;
+          ctx.moveTo(xOffset, margem.top - 12);
+          ctx.lineTo(xOffset + 16, margem.top - 12);
+          ctx.stroke();
+
+          ctx.fillStyle = '#e6edf7';
+          ctx.fillText(item.rotulo, xOffset + 22, margem.top - 12);
+        }
+
+        ctx.restore();
+      }
+
+      function desenharMarcadoresRevisao(revisoesAtivas, horizonte) {
+        if (!revisoesAtivas || revisoesAtivas.length === 0) return;
+
+        const plotW = canvasW - margem.left - margem.right;
+        const plotH = canvasH - margem.top - margem.bottom;
+
+        ctx.save();
+        ctx.shadowBlur = 0;
+        ctx.setLineDash([4, 4]);
+
+        revisoesAtivas.forEach(dia => {
+          if (dia <= 0 || dia > horizonte) return;
+          const x = margem.left + (dia / horizonte) * plotW;
+
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(78, 205, 196, 0.45)';
+          ctx.lineWidth = 1.5;
+          ctx.moveTo(x, margem.top);
+          ctx.lineTo(x, margem.top + plotH);
+          ctx.stroke();
+
+          ctx.setLineDash([]);
+          ctx.beginPath();
+          ctx.arc(x, margem.top, 4, 0, Math.PI * 2);
+          ctx.fillStyle = '#4ecdc4';
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#0d1527';
+          ctx.stroke();
+          ctx.setLineDash([4, 4]);
+        });
+
+        ctx.restore();
+      }
+
+      function desenharAreaEntreCurvas(curvaSem, curvaCom, limiteIndice) {
+        ctx.save();
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = 'transparent';
+
+        const plotW = canvasW - margem.left - margem.right;
+        const plotH = canvasH - margem.top - margem.bottom;
+
+        ctx.beginPath();
+        for (let i = 0; i <= limiteIndice; i++) {
+          const r = curvaCom[i];
+          const x = margem.left + (i / 300) * plotW;
+          const y = margem.top + plotH - (r / 100) * plotH;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+
+        for (let i = limiteIndice; i >= 0; i--) {
+          const r = curvaSem[i];
+          const x = margem.left + (i / 300) * plotW;
+          const y = margem.top + plotH - (r / 100) * plotH;
+          ctx.lineTo(x, y);
+        }
+
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(78, 205, 196, 0.15)';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function tracarCurva(curva, cor, limiteIndice) {
+        const plotW = canvasW - margem.left - margem.right;
+        const plotH = canvasH - margem.top - margem.bottom;
+
+        ctx.save();
+        ctx.beginPath();
+        for (let i = 0; i <= limiteIndice; i++) {
+          const r = curva[i];
+          const x = margem.left + (i / 300) * plotW;
+          const y = margem.top + plotH - (r / 100) * plotH;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = cor;
+        ctx.strokeStyle = cor;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = 'transparent';
+        ctx.restore();
+      }
+
+      function renderizarFrame(curvaSem, curvaCom, curvaCram, limiteIndice, modoComparar, revsMarcadores, horizonte) {
+        ctx.clearRect(0, 0, canvasW, canvasH);
+
+        desenharGradeEEixos(horizonte);
+
+        if (!modoComparar) {
+          desenharAreaEntreCurvas(curvaSem, curvaCom, limiteIndice);
+          desenharMarcadoresRevisao(revsMarcadores, horizonte);
+          tracarCurva(curvaSem, '#ff6b6b', limiteIndice);
+          tracarCurva(curvaCom, '#4ecdc4', limiteIndice);
+        } else {
+          const espacadaHoriz = ESTRATEGIAS_HORIZONTE[horizonte].espacada;
+          desenharMarcadoresRevisao(espacadaHoriz, horizonte);
+          tracarCurva(curvaSem, '#ff6b6b', limiteIndice);
+          tracarCurva(curvaCram, '#ffd166', limiteIndice);
+          tracarCurva(curvaCom, '#4ecdc4', limiteIndice);
+        }
+
+        desenharLegenda(modoComparar);
+      }
+
+      let animacaoGraficoId = null;
+
+      function iniciarAnimacaoGrafico(modoComparar, revisoesMarcadores, horizonte) {
+        if (animacaoGraficoId) {
+          cancelAnimationFrame(animacaoGraficoId);
+        }
+
+        const duracao = animacoes.primeiraRenderizacao ? 800 : 300;
+        let tempoInicio = null;
+
+        function loopAnimacao(timestamp) {
+          if (!tempoInicio) tempoInicio = timestamp;
+          const decorrido = timestamp - tempoInicio;
+          const progressoBruto = Math.min(decorrido / duracao, 1);
+          const progressoSuave = easeOutCubic(progressoBruto);
+
+          let limiteIndice = 300;
+          if (animacoes.primeiraRenderizacao) {
+            limiteIndice = Math.floor(progressoSuave * 300);
+            for (let i = 0; i <= 300; i++) {
+              animacoes.curvaAtualSem[i] = animacoes.curvaAlvoSem[i];
+              animacoes.curvaAtualCom[i] = animacoes.curvaAlvoCom[i];
+              animacoes.curvaAtualCram[i] = animacoes.curvaAlvoCram[i];
+            }
+          } else {
+            for (let i = 0; i <= 300; i++) {
+              animacoes.curvaAtualSem[i] = animacoes.curvaOrigemSem[i] + (animacoes.curvaAlvoSem[i] - animacoes.curvaOrigemSem[i]) * progressoSuave;
+              animacoes.curvaAtualCom[i] = animacoes.curvaOrigemCom[i] + (animacoes.curvaAlvoCom[i] - animacoes.curvaOrigemCom[i]) * progressoSuave;
+              animacoes.curvaAtualCram[i] = animacoes.curvaOrigemCram[i] + (animacoes.curvaAlvoCram[i] - animacoes.curvaOrigemCram[i]) * progressoSuave;
+            }
+          }
+
+          renderizarFrame(
+            animacoes.curvaAtualSem,
+            animacoes.curvaAtualCom,
+            animacoes.curvaAtualCram,
+            limiteIndice,
+            modoComparar,
+            revisoesMarcadores,
+            horizonte
+          );
+
+          if (progressoBruto < 1) {
+            animacaoGraficoId = requestAnimationFrame(loopAnimacao);
+          } else {
+            animacoes.primeiraRenderizacao = false;
+            for (let i = 0; i <= 300; i++) {
+              animacoes.curvaAtualSem[i] = animacoes.curvaAlvoSem[i];
+              animacoes.curvaAtualCom[i] = animacoes.curvaAlvoCom[i];
+              animacoes.curvaAtualCram[i] = animacoes.curvaAlvoCram[i];
+            }
+            renderizarFrame(
+              animacoes.curvaAtualSem,
+              animacoes.curvaAtualCom,
+              animacoes.curvaAtualCram,
+              300,
+              modoComparar,
+              revisoesMarcadores,
+              horizonte
+            );
+          }
+        }
+
+        animacaoGraficoId = requestAnimationFrame(loopAnimacao);
+      }
+
+      let timerAviso = null;
+      function exibirAvisoTimeline(msg, tempoMs = 2000) {
+        if (timerAviso) clearTimeout(timerAviso);
+        dom.timelineAviso.textContent = msg;
+        dom.timelineAviso.style.opacity = '1';
+        timerAviso = setTimeout(() => {
+          dom.timelineAviso.textContent = '';
+        }, tempoMs);
+      }
+
+      function alternarRevisao(dia) {
+        if (estado.modoComparar || estado.demoEmExecucao) return;
+
+        const index = estado.revisoes.indexOf(dia);
+        if (index > -1) {
+          estado.revisoes.splice(index, 1);
+        } else {
+          if (estado.revisoes.length >= 10) {
+            exibirAvisoTimeline('Máximo de 10 revisões.');
+            return;
+          }
+          estado.revisoes.push(dia);
+        }
+
+        estado.revisoes.sort((a, b) => a - b);
+        atualizarTudo();
+      }
+
+      function renderizarTimeline() {
+        dom.timeline.innerHTML = '';
+        const maxDia = estado.horizonte - 2;
+
+        dom.timelineHeaderTitle.textContent = `Linha do Tempo (dias 1 a ${maxDia})`;
+        dom.timelineExamHint.textContent = `Dia ${estado.horizonte} = dia da prova. Onde você revisa antes disso?`;
+
+        const conjunto = new Set(estado.revisoes);
+
+        for (let dia = 1; dia <= maxDia; dia++) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'timeline-cell' + (conjunto.has(dia) ? ' active' : '');
+          btn.textContent = dia;
+          btn.disabled = estado.demoEmExecucao || estado.modoComparar;
+          btn.setAttribute('aria-label', `Dia ${dia}${conjunto.has(dia) ? ' com revisão agendada' : ''}`);
+          btn.addEventListener('click', () => alternarRevisao(dia));
+          dom.timeline.appendChild(btn);
+        }
+
+        if (estado.modoComparar) {
+          dom.timeline.classList.add('timeline-disabled');
+          if (!estado.demoEmExecucao) {
+            exibirAvisoTimeline('Desative a comparação para editar suas revisões.');
+          }
+        } else {
+          dom.timeline.classList.remove('timeline-disabled');
+        }
+      }
+
+      let animacaoCardsId = null;
+
+      function obterCorPorRetencao(val) {
+        if (val < 40) return '#ff6b6b';
+        if (val < 80) return '#ffd166';
+        return '#4ecdc4';
+      }
+
+      function animarContadores(novoSem, novoCom) {
+        if (animacaoCardsId) cancelAnimationFrame(animacaoCardsId);
+
+        const inicioSem = animacoes.valorExibidoSem;
+        const inicioCom = animacoes.valorExibidoCom;
+        const duracao = 500;
+        let tempoInicio = null;
+
+        function loopCards(timestamp) {
+          if (!tempoInicio) tempoInicio = timestamp;
+          const decorrido = timestamp - tempoInicio;
+          const progresso = Math.min(decorrido / duracao, 1);
+          const suave = easeOutCubic(progresso);
+
+          const atualSem = Math.round(inicioSem + (novoSem - inicioSem) * suave);
+          const atualCom = Math.round(inicioCom + (novoCom - inicioCom) * suave);
+
+          animacoes.valorExibidoSem = isNaN(atualSem) ? 0 : atualSem;
+          animacoes.valorExibidoCom = isNaN(atualCom) ? 0 : atualCom;
+
+          dom.valSemRevisao.textContent = animacoes.valorExibidoSem === 0 ? 'menos de 1%' : animacoes.valorExibidoSem + '%';
+          dom.valComRevisao.textContent = animacoes.valorExibidoCom + '%';
+          dom.valComRevisao.style.color = obterCorPorRetencao(animacoes.valorExibidoCom);
+
+          if (progresso < 1) {
+            animacaoCardsId = requestAnimationFrame(loopCards);
+          } else {
+            animacoes.valorExibidoSem = novoSem;
+            animacoes.valorExibidoCom = novoCom;
+            dom.valSemRevisao.textContent = novoSem === 0 ? 'menos de 1%' : novoSem + '%';
+            dom.valComRevisao.textContent = novoCom + '%';
+            dom.valComRevisao.style.color = obterCorPorRetencao(novoCom);
+          }
+        }
+
+        animacaoCardsId = requestAnimationFrame(loopCards);
+      }
+
+      function atualizarFraseImpacto(retFinalCom, modoComparar, qtdRevisoes) {
+        if (modoComparar) {
+          dom.fraseImpacto.textContent = 'Mesmo tempo de estudo. Resultados completamente diferentes.';
+          dom.fraseImpacto.style.color = '#e6edf7';
+          return;
+        }
+
+        if (qtdRevisoes === 0) {
+          dom.fraseImpacto.textContent = 'Sem revisar, você chega à prova lembrando quase nada.';
+          dom.fraseImpacto.style.color = '#ff6b6b';
+          return;
+        }
+
+        const lembradas = Math.round(retFinalCom / 10);
+
+        if (lembradas <= 3) {
+          dom.fraseImpacto.textContent = `Na prova, você vai lembrar só ${lembradas} de cada 10 coisas que estudou.`;
+          dom.fraseImpacto.style.color = '#ff6b6b';
+        } else if (lembradas <= 7) {
+          dom.fraseImpacto.textContent = `Na prova, você vai lembrar ${lembradas} de cada 10 coisas. Dá para melhorar.`;
+          dom.fraseImpacto.style.color = '#ffd166';
+        } else {
+          dom.fraseImpacto.textContent = `Na prova, você vai lembrar ${lembradas} de cada 10 coisas. Esse é o poder da revisão espaçada.`;
+          dom.fraseImpacto.style.color = '#4ecdc4';
+        }
+      }
+
+      function atualizarCartoes(metricas) {
+        animarContadores(metricas.retFinalSem, metricas.retFinalCom);
+        dom.valTempoInvestido.textContent = metricas.tempoInvestido;
+        dom.valResultado.textContent = metricas.fraseResumo;
+        dom.timelineContador.textContent = `${estado.revisoes.length} revisões • ${metricas.tempoInvestido}`;
+      }
+
+      function atualizarTudo() {
+        const nomeConceito = estado.conceito.trim();
+        dom.tituloGrafico.textContent = nomeConceito ? `Retenção de: ${nomeConceito}` : 'Retenção do seu conteúdo';
+        dom.graphBadge.textContent = `Projeção de ${estado.horizonte} dias`;
+        dom.labelSemRevisao.textContent = `Sem revisão no dia ${estado.horizonte}`;
+        dom.labelComRevisao.textContent = `Com revisões no dia ${estado.horizonte}`;
+        dom.badgeEntendimento.textContent = `${estado.entendimento}/10`;
+
+        const S0 = calcularS0(estado.dificuldade, estado.entendimento);
+        const fator = obterFator(estado.dificuldade);
+
+        // Curva sem revisão
+        const ptsSem = calcularCurva(S0, fator, [], estado.horizonte);
+
+        // Curva com revisões
+        const configHoriz = ESTRATEGIAS_HORIZONTE[estado.horizonte];
+        const revisoesAtuais = estado.modoComparar ? configHoriz.espacada : estado.revisoes;
+        const ptsCom = calcularCurva(S0, fator, revisoesAtuais, estado.horizonte);
+
+        // Curva Amontoada do horizonte
+        const revisoesCram = configHoriz.cram;
+        const ptsCram = calcularCurva(S0, fator, revisoesCram, estado.horizonte);
+
+        for (let i = 0; i <= 300; i++) {
+          animacoes.curvaOrigemSem[i] = animacoes.curvaAtualSem[i];
+          animacoes.curvaOrigemCom[i] = animacoes.curvaAtualCom[i];
+          animacoes.curvaOrigemCram[i] = animacoes.curvaAtualCram[i];
+
+          animacoes.curvaAlvoSem[i] = ptsSem[i].r;
+          animacoes.curvaAlvoCom[i] = ptsCom[i].r;
+          animacoes.curvaAlvoCram[i] = ptsCram[i].r;
+        }
+
+        const metricas = calcularMetricas(ptsSem, ptsCom, revisoesAtuais.length, estado.horizonte);
+        atualizarCartoes(metricas);
+        atualizarFraseImpacto(metricas.retFinalCom, estado.modoComparar, revisoesAtuais.length);
+
+        dom.resumoGrafico.textContent = `Retenção no dia ${estado.horizonte}: Sem revisão ${metricas.retFinalSem === 0 ? 'menos de 1%' : metricas.retFinalSem + '%'}. Com revisões: ${metricas.retFinalCom}%. Tempo investido: ${metricas.tempoInvestido}. ${metricas.fraseResumo}`;
+
+        if (estado.modoComparar) {
+          const retCram = Math.round(ptsCram[300].r);
+          const retEsp = Math.round(ptsCom[300].r);
+          const tempoComparacao = formatarTempo(configHoriz.espacada.length);
+          dom.bannerComparacao.textContent = `Amontoada: ${retCram}% no dia ${estado.horizonte} • Espaçada: ${retEsp}% no dia ${estado.horizonte} — mesmo tempo investido (${tempoComparacao}).`;
+          dom.bannerComparacao.classList.add('visible');
+        } else {
+          dom.bannerComparacao.classList.remove('visible');
+        }
+
+        renderizarTimeline();
+        iniciarAnimacaoGrafico(estado.modoComparar, estado.modoComparar ? revisoesAtuais : estado.revisoes, estado.horizonte);
+      }
+
+      function obterPontoMouse(evt) {
+        const rect = dom.grafico.getBoundingClientRect();
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+
+        const xRel = clientX - rect.left;
+        const yRel = clientY - rect.top;
+
+        const plotW = canvasW - margem.left - margem.right;
+        if (xRel < margem.left || xRel > margem.left + plotW) {
+          return null;
+        }
+
+        const tFrac = (xRel - margem.left) / plotW;
+        const dia = Math.min(estado.horizonte, Math.max(0, tFrac * estado.horizonte));
+        const indice = Math.min(300, Math.max(0, Math.round((dia / estado.horizonte) * 300)));
+
+        return { dia, indice, xRel, yRel };
+      }
+
+      function atualizarTooltip(evt) {
+        const info = obterPontoMouse(evt);
+        if (!info) {
+          dom.graphTooltip.style.opacity = '0';
+          return;
+        }
+
+        const diaFormatado = info.dia.toFixed(1);
+        const valSem = Math.round(animacoes.curvaAlvoSem[info.indice]);
+        const valCom = Math.round(animacoes.curvaAlvoCom[info.indice]);
+
+        if (estado.modoComparar) {
+          const valCram = Math.round(animacoes.curvaAlvoCram[info.indice]);
+          dom.graphTooltip.innerHTML = `<strong>Dia ${diaFormatado}</strong><br>Sem revisão: <span style="color:#ff6b6b">${valSem}%</span><br>Amontoada: <span style="color:#ffd166">${valCram}%</span><br>Espaçada: <span style="color:#4ecdc4">${valCom}%</span>`;
+        } else {
+          dom.graphTooltip.innerHTML = `<strong>Dia ${diaFormatado}</strong> • Sem revisão: <span style="color:#ff6b6b">${valSem}%</span> • Com revisões: <span style="color:#4ecdc4">${valCom}%</span>`;
+        }
+
+        const tooltipX = Math.min(Math.max(info.xRel, 70), canvasW - 70);
+        dom.graphTooltip.style.left = `${tooltipX}px`;
+        dom.graphTooltip.style.top = `${Math.max(info.yRel - 10, 36)}px`;
+        dom.graphTooltip.style.opacity = '1';
+      }
+
+      function esconderTooltip() {
+        dom.graphTooltip.style.opacity = '0';
+      }
+
+      function alternarEstadoControles(bloqueado) {
+        dom.btnDemo.disabled = bloqueado;
+        dom.btnSugerir.disabled = bloqueado;
+        dom.btnLimpar.disabled = bloqueado;
+        dom.btnCalcular.disabled = bloqueado;
+        dom.conceito.disabled = bloqueado;
+        dom.horiz7.disabled = bloqueado;
+        dom.horiz15.disabled = bloqueado;
+        dom.horiz30.disabled = bloqueado;
+        dom.entendimento.disabled = bloqueado;
+        dom.difFacil.disabled = bloqueado;
+        dom.difMedio.disabled = bloqueado;
+        dom.difDificil.disabled = bloqueado;
+        dom.modoComparar.disabled = bloqueado;
+
+        const botoesTimeline = dom.timeline.querySelectorAll('button');
+        botoesTimeline.forEach(b => b.disabled = bloqueado);
+      }
+
+      function executarDemo10Segundos() {
+        if (estado.demoEmExecucao) return;
+        estado.demoEmExecucao = true;
+
+        estado.timersDemo.forEach(id => clearTimeout(id));
+        estado.timersDemo = [];
+
+        alternarEstadoControles(true);
+        dom.btnDemo.textContent = 'Rodando...';
+
+        // t = 0s: Passo 1 — Sem revisões
+        try {
+          if (estado.modoComparar) {
+            estado.modoComparar = false;
+            dom.modoComparar.checked = false;
+          }
+          estado.revisoes = [];
+          dom.demoLegenda.textContent = 'Passo 1 de 4 — Estudou uma vez e nunca mais revisou';
+          atualizarTudo();
+        } catch (e) {
+          console.error(e);
+        }
+
+        // t = 2,5s: Passo 2 — Revisões concentradas no início
+        const timer1 = setTimeout(() => {
+          try {
+            const maxDia = estado.horizonte - 2;
+            estado.revisoes = [1, 2].filter(d => d <= maxDia);
+            dom.demoLegenda.textContent = 'Passo 2 de 4 — Revisou só nos primeiros dias';
+            atualizarTudo();
+          } catch (e) {
+            console.error(e);
+          }
+        }, 2500);
+        estado.timersDemo.push(timer1);
+
+        // t = 5,0s: Passo 3 — Revisões espaçadas ao longo do período
+        const timer2 = setTimeout(() => {
+          try {
+            estado.revisoes = [...ESTRATEGIAS_HORIZONTE[estado.horizonte].espacada];
+            dom.demoLegenda.textContent = 'Passo 3 de 4 — Revisões espaçadas ao longo do período';
+            atualizarTudo();
+          } catch (e) {
+            console.error(e);
+          }
+        }, 5000);
+        estado.timersDemo.push(timer2);
+
+        // t = 7,5s: Passo 4 — Comparando estratégias
+        const timer3 = setTimeout(() => {
+          try {
+            estado.revisoesGuardadas = [...ESTRATEGIAS_HORIZONTE[estado.horizonte].espacada];
+            estado.modoComparar = true;
+            dom.modoComparar.checked = true;
+            dom.demoLegenda.textContent = 'Passo 4 de 4 — Comparando as estratégias';
+            atualizarTudo();
+          } catch (e) {
+            console.error(e);
+          }
+        }, 7500);
+        estado.timersDemo.push(timer3);
+
+        // t = 10,0s: Finalização e liberação dos controles
+        const timerFinal = setTimeout(() => {
+          try {
+            dom.demoLegenda.textContent = '';
+          } finally {
+            estado.demoEmExecucao = false;
+            alternarEstadoControles(false);
+            dom.btnDemo.textContent = '▶ Ver a história em 10s';
+            dom.modoComparar.checked = true;
+            estado.modoComparar = true;
+            renderizarTimeline();
+            exibirAvisoTimeline('Agora é sua vez: clique nos dias e monte seu plano.', 4000);
+          }
+        }, 10000);
+        estado.timersDemo.push(timerFinal);
+      }
+
+      dom.conceito.addEventListener('input', (e) => {
+        estado.conceito = e.target.value;
+        atualizarTudo();
+      });
+
+      // Seletor de Horizonte
+      const radiosHorizonte = document.querySelectorAll('input[name="horizonte"]');
+      radiosHorizonte.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            const novoH = parseInt(e.target.value, 10);
+            estado.horizonte = novoH;
+            
+            // Substitui revisões pelas sugeridas do novo horizonte
+            const novasSugeridas = [...ESTRATEGIAS_HORIZONTE[novoH].espacada];
+            estado.revisoes = [...novasSugeridas];
+            estado.revisoesGuardadas = [...novasSugeridas];
+
+            atualizarTudo();
+          }
+        });
+      });
+
+      dom.entendimento.addEventListener('input', (e) => {
+        estado.entendimento = parseInt(e.target.value, 10);
+        atualizarTudo();
+      });
+
+      const radiosDificuldade = document.querySelectorAll('input[name="dificuldade"]');
+      radiosDificuldade.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            estado.dificuldade = e.target.value;
+            atualizarTudo();
+          }
+        });
+      });
+
+      dom.btnCalcular.addEventListener('click', () => {
+        dom.graphWrapper.style.transition = 'transform 120ms ease';
+        dom.graphWrapper.style.transform = 'scale(0.99)';
+        setTimeout(() => {
+          dom.graphWrapper.style.transform = 'scale(1)';
+        }, 120);
+        atualizarTudo();
+      });
+
+      dom.btnDemo.addEventListener('click', executarDemo10Segundos);
+
+      dom.btnSugerir.addEventListener('click', () => {
+        if (estado.modoComparar || estado.demoEmExecucao) return;
+        estado.revisoes = [...ESTRATEGIAS_HORIZONTE[estado.horizonte].espacada];
+        atualizarTudo();
+      });
+
+      dom.btnLimpar.addEventListener('click', () => {
+        if (estado.modoComparar || estado.demoEmExecucao) return;
+        estado.revisoes = [];
+        atualizarTudo();
+      });
+
+      dom.modoComparar.addEventListener('change', (e) => {
+        if (estado.demoEmExecucao) return;
+        estado.modoComparar = e.target.checked;
+        if (estado.modoComparar) {
+          estado.revisoesGuardadas = [...estado.revisoes];
+        } else {
+          estado.revisoes = [...estado.revisoesGuardadas];
+        }
+        atualizarTudo();
+      });
+
+      dom.grafico.addEventListener('mousemove', atualizarTooltip);
+      dom.grafico.addEventListener('mouseleave', esconderTooltip);
+      dom.grafico.addEventListener('touchstart', (e) => {
+        atualizarTooltip(e);
+      }, { passive: true });
+      dom.grafico.addEventListener('touchmove', (e) => {
+        atualizarTooltip(e);
+      }, { passive: true });
+      dom.grafico.addEventListener('touchend', esconderTooltip);
+
+      let resizeTimeout = null;
+      window.addEventListener('resize', () => {
+        if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
+        resizeTimeout = requestAnimationFrame(() => {
+          redimensionarCanvas();
+          renderizarFrame(
+            animacoes.curvaAtualSem,
+            animacoes.curvaAtualCom,
+            animacoes.curvaAtualCram,
+            300,
+            estado.modoComparar,
+            estado.modoComparar ? ESTRATEGIAS_HORIZONTE[estado.horizonte].espacada : estado.revisoes,
+            estado.horizonte
+          );
+        });
+      });
+
+      // ===== Inicialização =====
+      function iniciar() {
+        redimensionarCanvas();
+        atualizarTudo();
+      }
+
+      iniciar();
+    });
+  </script>
+</body>
+</html>
