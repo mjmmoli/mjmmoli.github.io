@@ -154,18 +154,13 @@
  .btn-outline { background: transparent; color: var(--ink); }
  .btn-outline:hover { background: var(--ink); color: var(--paper); }
 
- .hero-id-card {
- border: 1px solid var(--line);
- background: var(--card);
- padding: 1.4rem 1.5rem;
- }
+ .hero-id-list { display: flex; flex-direction: column; }
  .hero-id-row {
- display: flex; justify-content: space-between; gap: 1rem;
- padding: 0.8rem 0;
- border-top: 1px solid var(--line-soft);
+ display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+ border-top: 1px solid var(--line); padding: 1rem 0;
  }
- .hero-id-row:first-child { border-top: none; padding-top: 0; }
- .hero-id-label { font-size: 0.76rem; color: var(--muted); }
+ .hero-id-list .hero-id-row:last-child { border-bottom: 1px solid var(--line); }
+ .hero-id-label { font-size: 0.78rem; color: var(--muted); }
  .hero-id-value { font-size: 0.86rem; color: var(--ink); font-weight: 500; text-align: right; }
 
  /* ===== SOBRE ===== */
@@ -380,7 +375,7 @@
  <a href="https://linkedin.com/in/mirnajmmoliveira" target="_blank" class="btn btn-outline">LinkedIn</a>
  </div>
  </div>
- <div class="hero-id-card fade-in d2">
+ <div class="hero-id-list fade-in d2">
  <div class="hero-id-row">
  <span class="hero-id-label">Localização</span>
  <span class="hero-id-value">Belo Horizonte, MG</span>
